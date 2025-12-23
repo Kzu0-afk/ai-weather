@@ -1,4 +1,4 @@
-# ☁️ AI-Weather ☁️
+# ☁️ AI-Weather (Dev't) ☁️
 
 A **full‑stack weather application** with clean architecture, built to demonstrate modern web development practices using **Next.js** and **NestJS**.
 
