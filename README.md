@@ -1,82 +1,125 @@
 # AI Weather ☁️🇯🇵
 
-A **full‑stack weather application** built with **Next.js (TypeScript)** on the frontend and **NestJS (Node.js)** on the backend. The project is intentionally structured to teach **real-world architecture**, not just API consumption.
-
-Frontend is deployed on **Vercel**. Backend is deployed on **Railway**.
+A **full‑stack weather application** with clean architecture, built to demonstrate modern web development practices using **Next.js** and **NestJS**.
 
 ---
 
-## Project Goals (Read This First)
+## 📖 Overview
 
-This project is designed to teach you:
+AI Weather is a personal project showcasing:
 
-* Clean frontend ↔ backend separation
-* API abstraction (provider‑agnostic design)
-* Type safety across services
-* Caching & rate‑limit awareness
-* Professional deployment flow
+- **Provider‑agnostic weather service**: Backend abstracts third-party APIs, exposing only a normalized contract to the frontend
+- **Type‑safe architecture**: End‑to‑end TypeScript with consistent domain models
+- **Performance & reliability**: In‑memory caching with TTL, graceful error handling, and CORS protection
+- **Minimal, Japanese‑inspired UI**: Clean design prioritizing readability over decoration
+- **Production deployment**: Backend on Railway, frontend on Vercel
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
-
-* Next.js (App Router)
-* TypeScript
-* Fetch / Server Actions
-* Minimal CSS (or CSS Modules)
+- **Next.js 15+** (App Router)
+- **TypeScript**
+- **React 19+**
+- **CSS Modules** (minimal styling)
 
 ### Backend
+- **NestJS**
+- **Node.js**
+- **Axios** (HTTP client)
+- **In‑memory caching** (upgradeable to Redis)
 
-* NestJS
-* Node.js
-* Axios / Fetch
-* In‑memory cache (upgradeable to Redis)
-
-### External Services
-
-* Weather API (OpenWeatherMap / WeatherAPI / Open‑Meteo)
-* Railway (Backend hosting)
-* Vercel (Frontend hosting)
+### Infrastructure
+- **Vercel** (frontend hosting)
+- **Railway** (backend hosting)
+- **Open‑Meteo** (weather data provider)
 
 ---
 
-## High‑Level Architecture
+## 🏗️ Architecture
 
 ```
-Next.js (Vercel)
-      ↓
-NestJS API (Railway)
-      ↓
-Weather Provider API
+┌─────────────────┐
+│  Next.js Client │  (Vercel)
+└────────┬────────┘
+         │ HTTPS
+         ▼
+┌─────────────────┐
+│   NestJS API    │  (Railway)
+└────────┬────────┘
+         │ HTTPS
+         ▼
+┌─────────────────┐
+│ Weather Provider│  (Open‑Meteo)
+└─────────────────┘
 ```
 
-**Important rule:** The frontend must NEVER call the weather provider directly.
+**Core principle:** The frontend never calls the weather provider directly. All data flows through the backend, which normalizes responses into a stable, provider‑agnostic contract.
 
 ---
 
-# Phase 1 – Planning & API Contract
+## 🚀 Development Phases
 
-### 1. Define the Core Feature
+This project is structured in **9 distinct phases**, from initial setup to production deployment:
 
-* Search weather by city
-* Display:
+1. **Foundations** – Project scaffolding and constraints
+2. **API Contract** – Define the normalized weather schema
+3. **Provider Integration** – Connect to external weather APIs
+4. **Caching & Rate Limits** – Add stability and abuse protection
+5. **Frontend MVP** – Build the search and result UI
+6. **Routing** – Add city‑specific pages
+7. **AI Enhancements** – Intelligent suggestions and insights
+8. **Hardening** – Security, validation, error handling
+9. **Deployment** – Push to production (Railway + Vercel)
 
-    * Temperature
-    * Condition
-    * Humidity
-    * Wind speed
-    * Local time
+For detailed phase‑by‑phase implementation guidance, see **[AI-WEATHER-DEVELOPMENT.md](./AI-WEATHER-DEVELOPMENT.md)**.
 
-### 2. Define the Backend API Contract
+---
 
+## 📦 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Backend
+```bash
+cd ai-weather-backend
+npm install
+npm run start:dev  # Runs on http://localhost:3001
 ```
-GET /weather?city=Tokyo
+
+### Frontend
+```bash
+cd ai-weather-frontend
+npm install
+npm run dev  # Runs on http://localhost:3000
 ```
 
-### Sample Response (Normalized)
+### Environment Variables
 
+**Backend** (`.env` in `ai-weather-backend/`):
+```bash
+PORT=3001
+FRONTEND_ORIGIN=http://localhost:3000
+```
+
+**Frontend** (`.env.local` in `ai-weather-frontend/`):
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
+```
+
+---
+
+## 📝 API Reference
+
+### `GET /weather`
+
+**Query Parameters:**
+- `city` (string, required): Name of the city
+
+**Response:**
 ```json
 {
   "city": "Tokyo",
@@ -90,210 +133,91 @@ GET /weather?city=Tokyo
 }
 ```
 
-The frontend depends ONLY on this structure.
+**Status Codes:**
+- `200` – Success
+- `400` – Missing or invalid city parameter
+- `404` – City not found
+- `500` – Provider or server error
 
 ---
 
-# Phase 2 – Backend Setup (NestJS)
+## 🎨 Design Philosophy
 
-### 1. Create the Project
+The UI follows a **minimal, Japanese‑inspired aesthetic**:
 
+- **Calm color palette** – Neutral tones with subtle accents
+- **Clear typography** – Prioritizes readability
+- **No clutter** – Only essential information displayed
+- **Responsive** – Works across devices
+
+*"If the design distracts from the data, it's wrong."*
+
+---
+
+## 🔒 Security & Best Practices
+
+- **CORS enforcement** – Backend restricts origins via `FRONTEND_ORIGIN`
+- **Input validation** – City parameters sanitized before processing
+- **Error sanitization** – No provider details leaked to frontend
+- **Rate limiting** – (Planned) Middleware to prevent abuse
+- **No exposed secrets** – API keys never reach the browser
+
+---
+
+## 🧪 Testing
+
+Run backend tests:
 ```bash
-npm i -g @nestjs/cli
-nest new ai-weather-backend
 cd ai-weather-backend
-npm run start:dev
+npm test
 ```
 
-### 2. Create Weather Module
-
+Run frontend checks:
 ```bash
-nest g module weather
-nest g controller weather
-nest g service weather
-```
-
-### 3. Folder Structure
-
-```
-src/
- ├─ weather/
- │   ├─ weather.controller.ts
- │   ├─ weather.service.ts
- │   ├─ dto/
- │   └─ interfaces/
- ├─ app.module.ts
-```
-
----
-
-# Phase 3 – Weather API Integration
-
-### 1. Choose a Weather Provider
-
-Recommended:
-
-* OpenWeatherMap (free tier)
-* Open‑Meteo (no API key)
-
-### 2. Store API Key Securely
-
-Create `.env`:
-
-```
-WEATHER_API_KEY=your_key_here
-```
-
-Never commit this file.
-
-### 3. Implement Weather Service
-
-Responsibilities:
-
-* Fetch raw API data
-* Normalize response
-* Hide provider details
-
----
-
-# Phase 4 – Caching & Stability
-
-### Why Caching Matters
-
-* Weather data doesn’t change every second
-* APIs have rate limits
-* No caching = fragile app
-
-### Basic In‑Memory Cache
-
-* Key: `city`
-* TTL: 10–30 minutes
-
-Later upgrade:
-
-* Redis (Railway supports it)
-
----
-
-# Phase 5 – Frontend Setup (Next.js)
-
-### 1. Create Next.js App
-
-```bash
-npx create-next-app@latest ai-weather-frontend --typescript
 cd ai-weather-frontend
-npm run dev
+npm run lint
 ```
 
-### 2. Basic Routes
-
-```
-/app
- ├─ page.tsx          // Search page
- ├─ city/[name]/page.tsx
-```
-
-### 3. Data Fetching Rule
-
-* Frontend calls **NestJS API only**
-* Use server components or server actions
+Manual testing checklist available in `AI-WEATHER-DEVELOPMENT.md` (Phase 7).
 
 ---
 
-# Phase 6 – UI & Japanese Theme (Minimal, Not Gimmicky)
+## 📊 Roadmap
 
-### Design Principles
+**Completed:**
+- ✅ Backend API with normalized contract
+- ✅ Frontend search and result UI
+- ✅ In‑memory caching (15-minute TTL)
+- ✅ CORS and error handling
 
-* Clean
-* Quiet colors
-* No anime clutter
-
-### Japanese‑Inspired Ideas
-
-* Kanji‑based weather icons
-* Season labels (季節)
-* Romaji + Kana city toggle
-
-If design distracts from readability, it’s wrong.
-
----
-
-# Phase 7 – "AI" Features (Optional but Honest)
-
-If you call it **AI Weather**, implement at least one:
-
-1. Smart suggestions
-
-    * “Rain likely in 2 hours — bring an umbrella”
-2. Trend comparison
-
-    * “Today is colder than average by 3°C”
-3. Natural‑language summary
-
-No intelligence = remove "AI" from the name.
+**Planned:**
+- [ ] Redis-based distributed cache
+- [ ] "AI" insights (smart suggestions, trend analysis)
+- [ ] Saved cities / favorites
+- [ ] PWA support for offline mode
+- [ ] User location detection
+- [ ] Structured logging and monitoring
 
 ---
 
-# Phase 8 – Testing & Hardening
+## ⚠️ Disclaimer
 
-### Backend
-
-* Test API with Postman
-* Invalid city handling
-* API timeout handling
-
-### Frontend
-
-* Loading states
-* Error states
-* Empty search prevention
+This is a **personal project** built for learning and portfolio purposes. It demonstrates clean architecture, modern tooling, and deployment workflows, but is not intended for commercial use without further hardening and scaling considerations.
 
 ---
 
-# Phase 9 – Deployment (Final Phase)
+## 📄 License
 
-## Backend – Railway
-
-1. Push backend to GitHub
-2. Create Railway project
-3. Connect GitHub repo
-4. Set environment variables
-5. Deploy
-
-Confirm:
-
-```
-https://your-backend.up.railway.app/weather?city=Tokyo
-```
+See [LICENSE](./LICENSE) for details.
 
 ---
 
-## Frontend – Vercel
+## 🔗 Links
 
-1. Push frontend to GitHub
-2. Import project into Vercel
-3. Set backend API URL env var
-4. Deploy
-
-Never expose weather API keys in frontend.
+- **Live Demo:** *(Coming soon)*
+- **Documentation:** [AI-WEATHER-DEVELOPMENT.md](./AI-WEATHER-DEVELOPMENT.md)
+- **GitHub:** *(Repository link)*
 
 ---
 
-## Final Outcome
-
-You now have:
-
-* A real full‑stack app
-* Clean separation of concerns
-* Deployable, scalable architecture
-
-This is portfolio‑worthy **only if** you followed every phase properly.
-
----
-
-## Next Level Improvements
-
-* Redis caching
-* User location detection
-* Saved cities
-* PWA offline mode
+**Built with ☕ and 静 (calm) in mind.**
