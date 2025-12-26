@@ -5,7 +5,7 @@ Each phase should end in something **runnable and stable**, even if visually min
 
 ---
 
-## Phase 0 – Foundations & Constraints
+## Phase 0 – Foundations & Constraints ✅ **COMPLETED**
 
 - **Goals**
   - Establish folder layout: `ai-weather-frontend` (Next.js) and `ai-weather-backend` (NestJS).
@@ -14,10 +14,14 @@ Each phase should end in something **runnable and stable**, even if visually min
 - **Deliverables**
   - Projects generated and buildable (`npm run dev` / `npm run start:dev`).
   - This file (`AI-WEATHER-DEVELOPMENT.md`) committed as living architecture guide.
+- **Status**: ✅ Complete
+  - Both Next.js and NestJS projects scaffolded
+  - IntelliJ run configurations documented (`INTELLIJ-SETUP.md`)
+  - Environment files structure established
 
 ---
 
-## Phase 1 – API Contract & Domain Model
+## Phase 1 – API Contract & Domain Model ✅ **COMPLETED**
 
 - **Goals**
   - Lock the **weather contract** between frontend and backend:
@@ -34,6 +38,15 @@ Each phase should end in something **runnable and stable**, even if visually min
 - **Deliverables**
   - Backend returns a **static or provider-backed** normalized object for a known city.
   - Frontend can call `/weather` and render the raw JSON (no final UI yet).
+- **Status**: ✅ Complete
+  - **API Contract**: `GET /weather?city=<cityName>` endpoint defined
+  - **Types**: `NormalizedWeather` (backend) and `WeatherResponse` (frontend) match exactly
+  - **DTO Validation**: `GetWeatherDto` with class-validator decorators
+  - **Global Validation**: ValidationPipe enabled in `main.ts` with whitelist and transform
+  - **Documentation**: API contract documented in controller and frontend API helper
+  - **Files Created**:
+    - `src/weather/dto/get-weather.dto.ts`
+    - Updated: `weather.controller.ts`, `main.ts`, `api.ts`
 
 ---
 
