@@ -1,13 +1,20 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { WeatherService } from './weather.service';
 import { GetWeatherDto } from './dto/get-weather.dto';
-import { NormalizedWeather } from './interfaces/weather.types';
+import { GetWeatherByCoordsDto } from './dto/get-weather-by-coords.dto';
+import { SearchCitiesDto } from './dto/search-cities.dto';
+import {
+  CitySuggestion,
+  NormalizedWeather,
+} from './interfaces/weather.types';
 
 /**
  * Weather Controller
  * 
- * API Contract (Phase 1):
- * GET /weather?city=<cityName>
+ * API Contract (Phase 1 & 2):
+ * GET /weather?city=<cityName> - Get weather by city name
+ * GET /weather/coordinates?latitude=<lat>&longitude=<lon> - Get weather by coordinates
+ * GET /weather/search?query=<query> - Search for city suggestions (autocomplete)
  * 
  * Returns NormalizedWeather:
  * - city: string
@@ -26,5 +33,20 @@ export class WeatherController {
   @Get()
   async getWeather(@Query() query: GetWeatherDto): Promise<NormalizedWeather> {
     return this.weatherService.getWeather(query.city);
+  }
+
+  @Get('coordinates')
+  async getWeatherByCoordinates(
+    @Query() query: GetWeatherByCoordsDto,
+  ): Promise<NormalizedWeather> {
+    return this.weatherService.getWeatherByCoordinates(
+      query.latitude,
+      query.longitude,
+    );
+  }
+
+  @Get('search')
+  async searchCities(@Query() query: SearchCitiesDto): Promise<CitySuggestion[]> {
+    return this.weatherService.searchCities(query.query);
   }
 }

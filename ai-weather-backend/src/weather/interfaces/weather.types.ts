@@ -17,3 +17,9 @@ export interface CityLookupResult {
   timezone: string;
 }
 
+export interface CitySuggestion {
+  name: string;
+  country: string;
+  countryCode: string;
+}
+
