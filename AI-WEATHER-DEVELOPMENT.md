@@ -50,11 +50,12 @@ Each phase should end in something **runnable and stable**, even if visually min
 
 ---
 
-## Phase 2 – Weather Provider Integration (Backend Only)
+## Phase 2 – Weather Provider Integration (Backend Only) ✅ **COMPLETED**
 
 - **Goals**
   - Integrate a real provider (initially **Open‑Meteo**).
   - Keep the **provider fully hidden** behind NestJS.
+  - **Additional**: Location-based weather detection for user's current location.
 - **Backend Tasks**
   - Implement city lookup (e.g. Open‑Meteo geocoding).
   - Implement current weather fetch, normalize it into `NormalizedWeather`.
@@ -66,6 +67,30 @@ Each phase should end in something **runnable and stable**, even if visually min
   - No provider credentials are ever exposed to the frontend.
 - **Deliverables**
   - `GET /weather?city=Tokyo` returns live data from the provider in normalized format.
+  - `GET /weather/coordinates?latitude=<lat>&longitude=<lon>` returns weather for coordinates.
+- **Status**: ✅ Complete
+  - **Provider Integration**: Open-Meteo API integrated (geocoding + forecast)
+  - **City Lookup**: Open-Meteo geocoding API for city search
+  - **Weather Fetch**: Open-Meteo forecast API for current weather data
+  - **Normalization**: Raw provider data normalized to `NormalizedWeather` contract
+  - **Error Handling**: 
+    - 404 for invalid/unknown cities
+    - 500 for network/provider errors (no internal details leaked)
+    - 8-second timeout on all external requests
+  - **Location-Based Weather**:
+    - New endpoint: `GET /weather/coordinates?latitude=<lat>&longitude=<lon>`
+    - Reverse geocoding via Nominatim (OpenStreetMap) to get city name
+    - Fallback handling if reverse geocoding fails
+  - **Frontend Geolocation**:
+    - Automatic location request on page load
+    - Auto-fetch weather when user grants location permission
+    - Graceful fallback if user denies location (can still search manually)
+  - **Files Created/Updated**:
+    - `src/weather/dto/get-weather-by-coords.dto.ts` (new)
+    - `weather.service.ts` (added `getWeatherByCoordinates`, `reverseGeocode`, `fetchWeatherByCoords`)
+    - `weather.controller.ts` (added coordinates endpoint)
+    - `api.ts` (added `fetchWeatherByCoordinates` function)
+    - `page.tsx` (added geolocation detection with useEffect)
 
 ---
 
