@@ -6,7 +6,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { CityLookupResult, NormalizedWeather } from './interfaces/weather.types';
+import {
+  CityLookupResult,
+  CitySuggestion,
+  NormalizedWeather,
+} from './interfaces/weather.types';
 
 @Injectable()
 export class WeatherService {
@@ -49,6 +53,74 @@ export class WeatherService {
     });
 
     return normalized;
+  }
+
+  async getWeatherByCoordinates(
+    latitude: number,
+    longitude: number,
+  ): Promise<NormalizedWeather> {
+    // Cache key based on rounded coordinates (to 2 decimal places = ~1km precision)
+    const cacheKey = `coords:${latitude.toFixed(2)},${longitude.toFixed(2)}`;
+    const cached = this.getFromCache(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    // Reverse geocode to get city name and timezone
+    const cityData = await this.reverseGeocode(latitude, longitude);
+    const weather = await this.fetchWeatherByCoords(
+      latitude,
+      longitude,
+      cityData.timezone,
+    );
+
+    const normalized: NormalizedWeather = {
+      city: cityData.name,
+      country: cityData.countryCode,
+      temperature: Math.round(weather.temperature_2m),
+      feelsLike: Math.round(weather.apparent_temperature),
+      condition: this.mapWeatherCode(weather.weather_code),
+      humidity: weather.relative_humidity_2m,
+      windSpeed: weather.wind_speed_10m,
+      updatedAt: weather.time,
+    };
+
+    this.cache.set(cacheKey, {
+      payload: normalized,
+      expiresAt: Date.now() + this.cacheTtlMs,
+    });
+
+    return normalized;
+  }
+
+  async searchCities(query: string): Promise<CitySuggestion[]> {
+    const trimmed = query.trim();
+    if (!trimmed || trimmed.length < 1) {
+      return [];
+    }
+
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+      trimmed,
+    )}&count=5&language=en&format=json`;
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          timeout: 5000,
+        }),
+      );
+
+      const results = response.data?.results || [];
+
+      return results.map((result: any) => ({
+        name: result.name,
+        country: result.country || '',
+        countryCode: result.country_code || '',
+      }));
+    } catch (error) {
+      // Return empty array on error instead of throwing
+      return [];
+    }
   }
 
   private getFromCache(city: string): NormalizedWeather | null {
@@ -99,10 +171,16 @@ export class WeatherService {
   }
 
   private async fetchWeather(city: CityLookupResult) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${
-      city.latitude
-    }&longitude=${city.longitude}&timezone=${encodeURIComponent(
-      city.timezone,
+    return this.fetchWeatherByCoords(city.latitude, city.longitude, city.timezone);
+  }
+
+  private async fetchWeatherByCoords(
+    latitude: number,
+    longitude: number,
+    timezone: string,
+  ) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&timezone=${encodeURIComponent(
+      timezone,
     )}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code`;
 
     try {
@@ -126,6 +204,61 @@ export class WeatherService {
       };
     } catch (error) {
       throw new InternalServerErrorException('Unable to fetch weather data');
+    }
+  }
+
+  private async reverseGeocode(
+    latitude: number,
+    longitude: number,
+  ): Promise<CityLookupResult> {
+    // Use Nominatim (OpenStreetMap) for reverse geocoding (free, no API key)
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`;
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          timeout: 8000,
+          headers: {
+            'User-Agent': 'AI-Weather-App/1.0',
+          },
+        }),
+      );
+
+      const address = response.data?.address;
+      if (address) {
+        const cityName =
+          address.city ||
+          address.town ||
+          address.village ||
+          address.municipality ||
+          address.county ||
+          `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+
+        // Estimate timezone from longitude (rough approximation)
+        const timezoneOffset = Math.round(longitude / 15);
+        const timezone = `Etc/GMT${timezoneOffset >= 0 ? '-' : '+'}${Math.abs(timezoneOffset)}`;
+
+        return {
+          name: cityName,
+          countryCode: address.country_code?.toUpperCase() || 'XX',
+          latitude,
+          longitude,
+          timezone,
+        };
+      }
+
+      throw new Error('No address found');
+    } catch (error) {
+      // Fallback: use coordinates and estimate timezone
+      const timezoneOffset = Math.round(longitude / 15);
+      const timezone = `Etc/GMT${timezoneOffset >= 0 ? '-' : '+'}${Math.abs(timezoneOffset)}`;
+      return {
+        name: `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`,
+        countryCode: 'XX',
+        latitude,
+        longitude,
+        timezone,
+      };
     }
   }
 
