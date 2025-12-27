@@ -91,6 +91,18 @@ Each phase should end in something **runnable and stable**, even if visually min
     - `weather.controller.ts` (added coordinates endpoint)
     - `api.ts` (added `fetchWeatherByCoordinates` function)
     - `page.tsx` (added geolocation detection with useEffect)
+  - **Additional Enhancements**:
+    - **City Autocomplete**: Added `GET /weather/search?query=<query>` endpoint for city suggestions
+    - **Frontend Dropdown**: Implemented autocomplete dropdown with 300ms debounce, shows up to 5 suggestions
+    - **Error Handling**: Improved user-friendly error messages (404 → "404 Error | Location not found")
+    - **Files Added**:
+      - `src/weather/dto/search-cities.dto.ts` (new)
+      - `src/weather/interfaces/weather.types.ts` (added `CitySuggestion` interface)
+      - `weather.service.ts` (added `searchCities()` method)
+      - `weather.controller.ts` (added search endpoint)
+      - `api.ts` (added `searchCities()` and improved error formatting)
+      - `page.tsx` (added autocomplete UI with dropdown)
+      - `page.module.css` (added dropdown and suggestion styles)
 
 ---
 
@@ -99,18 +111,23 @@ Each phase should end in something **runnable and stable**, even if visually min
 - **Goals**
   - Avoid hammering the provider and make UX more stable.
   - Prepare for future Redis upgrade.
+  - **Note**: Basic in-memory caching already implemented in Phase 2 (15-minute TTL). Phase 3 will enhance and formalize it.
 - **Backend Tasks**
-  - Implement a simple in‑memory cache:
-    - Key: lower‑cased `city`.
+  - Review and optimize existing in‑memory cache implementation:
+    - Key: lower‑cased `city` or coordinates-based key.
     - Value: normalized weather + `expiresAt`.
-    - TTL: **10–30 minutes** (configurable).
+    - Current TTL: 15 minutes (make configurable via environment variable).
   - Ensure cache is applied **after** successful provider response only.
+  - Add cache statistics/monitoring (optional but useful).
 - **Security / Anti‑abuse**
   - Add basic request logging (without sensitive provider details).
-  - Add simple **rate limit per IP** (once Nest middleware/guard is introduced in later passes).
+  - Add simple **rate limit per IP** using NestJS middleware/guard.
+  - Implement request throttling to prevent abuse.
 - **Deliverables**
-  - Repeated calls for the same city hit the cache until TTL expires.
-  - Provider calls can be observed to decrease when testing manually.
+  - Cache TTL configurable via environment variables.
+  - Rate limiting middleware preventing excessive requests from single IP.
+  - Request logging for monitoring and debugging.
+  - Cache hit/miss metrics (optional).
 
 ---
 
