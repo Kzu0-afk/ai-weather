@@ -80,8 +80,13 @@
   gap: 12px;
 }
 
-.inputRow input {
+.inputWrapper {
   flex: 1;
+  position: relative;
+}
+
+.inputRow input {
+  width: 100%;
   padding: 12px 14px;
   border: 1px solid #cbd5e1;
   border-radius: 12px;
@@ -90,11 +95,60 @@
   color: #0f172a;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
 .inputRow input:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(14, 36, 64, 0.15);
+  z-index: 1000;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.suggestionItem {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.suggestionItem:last-child {
+  border-bottom: none;
+}
+
+.suggestionItem:hover {
+  background-color: #f8fafc;
+}
+
+.suggestionName {
+  font-weight: 600;
+  color: #111827;
+  font-size: 15px;
+}
+
+.suggestionCountry {
+  color: #6b7280;
+  font-size: 13px;
 }
 
 .inputRow button {
@@ -208,6 +262,10 @@
   }
 
   .inputRow button {
+    width: 100%;
+  }
+
+  .inputWrapper {
     width: 100%;
   }
 
