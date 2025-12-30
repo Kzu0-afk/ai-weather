@@ -143,10 +143,15 @@ Each phase should end in something **runnable and stable**, even if visually min
     - `main.ts` (added global LoggingInterceptor)
     - `weather.service.ts` (made cache TTL configurable, added cache statistics)
     - `weather.controller.ts` (added cache stats endpoint)
+  - **Testing Verified**:
+    - Rate limiting tested: 429 responses after exceeding limit
+    - Cache stats endpoint functional: returns hits, misses, size, TTL
+    - Request logging verified: sanitized URLs and status codes logged
+    - Cache TTL configuration tested: environment variable works correctly
 
 ---
 
-## Phase 4 – Frontend MVP UI (Search + Result)
+## Phase 4 – Frontend MVP UI (Search + Result) ✅ **MOSTLY COMPLETE**
 
 - **Goals**
   - Build a **single-page MVP** to:
@@ -163,6 +168,19 @@ Each phase should end in something **runnable and stable**, even if visually min
 - **Deliverables**
   - User can type a city → see a clean card-based summary of current weather.
   - Graceful error messages for invalid or unreachable cities.
+- **Status**: ✅ Mostly Complete (Implemented in Phase 2 enhancements)
+  - **Search Functionality**: ✅ City input with autocomplete dropdown
+  - **Weather Display**: ✅ Card-based layout showing all normalized data
+  - **Loading States**: ✅ Loading indicator during API calls
+  - **Error Handling**: ✅ User-friendly error messages
+  - **Japanese-Inspired Design**: ✅ Minimal, calm design with gradient backgrounds
+  - **Location Detection**: ✅ Auto-fetch weather on page load (Phase 2)
+  - **Remaining Tasks** (Optional Refinements):
+    - Update metadata (title, description) in `layout.tsx`
+    - Add loading skeleton/placeholder for better UX
+    - Enhance responsive design for mobile devices
+    - Add subtle animations/transitions
+    - Polish typography and spacing
 
 ---
 
