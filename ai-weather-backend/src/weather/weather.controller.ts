@@ -49,4 +49,9 @@ export class WeatherController {
   async searchCities(@Query() query: SearchCitiesDto): Promise<CitySuggestion[]> {
     return this.weatherService.searchCities(query.query);
   }
+
+  @Get('cache/stats')
+  getCacheStats() {
+    return this.weatherService.getCacheStats();
+  }
 }

@@ -106,7 +106,7 @@ Each phase should end in something **runnable and stable**, even if visually min
 
 ---
 
-## Phase 3 – Caching & Rate‑Limit Protection
+## Phase 3 – Caching & Rate‑Limit Protection ✅ **COMPLETED**
 
 - **Goals**
   - Avoid hammering the provider and make UX more stable.
@@ -128,6 +128,21 @@ Each phase should end in something **runnable and stable**, even if visually min
   - Rate limiting middleware preventing excessive requests from single IP.
   - Request logging for monitoring and debugging.
   - Cache hit/miss metrics (optional).
+- **Status**: ✅ Complete
+  - **Configurable Cache TTL**: Cache TTL now configurable via `CACHE_TTL_MINUTES` environment variable (default: 15 minutes)
+  - **Cache Statistics**: Added `getCacheStats()` method tracking hits, misses, cache size, and TTL
+  - **Rate Limiting**: Implemented using `@nestjs/throttler` with configurable limits via `RATE_LIMIT_REQUESTS` (default: 20 requests per minute)
+  - **Request Logging**: Added `LoggingInterceptor` that logs all HTTP requests with:
+    - Method, URL (sanitized), status code, duration, IP address
+    - Query parameter values are masked to prevent logging sensitive data
+    - Error logging includes error messages
+  - **Cache Stats Endpoint**: Added `GET /weather/cache/stats` endpoint for monitoring cache performance
+  - **Files Created/Updated**:
+    - `src/common/interceptors/logging.interceptor.ts` (new)
+    - `app.module.ts` (added ThrottlerModule and global guard)
+    - `main.ts` (added global LoggingInterceptor)
+    - `weather.service.ts` (made cache TTL configurable, added cache statistics)
+    - `weather.controller.ts` (added cache stats endpoint)
 
 ---
 

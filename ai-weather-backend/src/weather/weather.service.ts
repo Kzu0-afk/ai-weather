@@ -18,9 +18,18 @@ export class WeatherService {
     string,
     { payload: NormalizedWeather; expiresAt: number }
   >();
-  private readonly cacheTtlMs = 15 * 60 * 1000; // 15 minutes
+  private readonly cacheTtlMs: number;
+  private cacheHits = 0;
+  private cacheMisses = 0;
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService) {
+    // Cache TTL from environment variable (default: 15 minutes)
+    const cacheTtlMinutes = parseInt(
+      process.env.CACHE_TTL_MINUTES || '15',
+      10,
+    );
+    this.cacheTtlMs = cacheTtlMinutes * 60 * 1000;
+  }
 
   async getWeather(city: string): Promise<NormalizedWeather> {
     const normalizedCity = city.trim();
@@ -123,18 +132,32 @@ export class WeatherService {
     }
   }
 
-  private getFromCache(city: string): NormalizedWeather | null {
-    const entry = this.cache.get(city.toLowerCase());
+  private getFromCache(key: string): NormalizedWeather | null {
+    // Normalize key (lowercase for city names, keep as-is for coordinate keys)
+    const normalizedKey = key.startsWith('coords:') ? key : key.toLowerCase();
+    const entry = this.cache.get(normalizedKey);
     if (!entry) {
+      this.cacheMisses++;
       return null;
     }
 
     if (entry.expiresAt < Date.now()) {
-      this.cache.delete(city.toLowerCase());
+      this.cache.delete(normalizedKey);
+      this.cacheMisses++;
       return null;
     }
 
+    this.cacheHits++;
     return entry.payload;
+  }
+
+  getCacheStats() {
+    return {
+      hits: this.cacheHits,
+      misses: this.cacheMisses,
+      size: this.cache.size,
+      ttlMinutes: this.cacheTtlMs / (60 * 1000),
+    };
   }
 
   private async lookupCity(city: string): Promise<CityLookupResult> {
