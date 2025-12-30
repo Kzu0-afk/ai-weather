@@ -1,79 +1,124 @@
+
+<div align="center">
 # ☁️ AI-Weather (Dev't) ☁️
 
-A **full‑stack weather application** with clean architecture, built to demonstrate modern web development practices using **Next.js** and **NestJS**.
+# ☁️ AI Weather 🇯🇵
+
+**A minimal, intelligent weather application with clean architecture**
+
+*Built with Next.js & NestJS • Deployed on Vercel & Railway*
+
+[![Next.js](https://img.shields.io/badge/Next.js-15+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-11+-red?style=flat-square&logo=nestjs)](https://nestjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+
+</div>
+
+---
 
 ---
 
 ## 📖 Overview
 
-AI Weather is a personal project showcasing:
+AI Weather is a **full‑stack weather application** that demonstrates modern web development practices through clean architecture, type safety, and thoughtful design. The project showcases a complete development workflow from initial setup to production deployment.
 
-- **Provider‑agnostic weather service**: Backend abstracts third-party APIs, exposing only a normalized contract to the frontend
-- **Type‑safe architecture**: End‑to‑end TypeScript with consistent domain models
-- **Performance & reliability**: In‑memory caching with TTL, graceful error handling, and CORS protection
-- **Minimal, Japanese‑inspired UI**: Clean design prioritizing readability over decoration
-- **Production deployment**: Backend on Railway, frontend on Vercel
+### ✨ Key Features
+
+- 🌍 **Provider‑Agnostic Architecture** – Backend abstracts weather APIs, exposing a stable contract
+- 🎯 **Type‑Safe End‑to‑End** – TypeScript across frontend and backend with shared domain models
+- ⚡ **Performance Optimized** – Intelligent caching, rate limiting, and request optimization
+- 🎨 **Minimal Japanese Design** – Clean, calm interface prioritizing clarity over decoration
+- 🔒 **Production Ready** – Security, error handling, and monitoring built-in
+- 📍 **Smart Location Detection** – Automatic weather fetching based on user location
+- 🔍 **Intelligent Autocomplete** – Real-time city suggestions as you type
 
 ---
 
 ## 🛠️ Tech Stack
 
+<table>
+<tr>
+<td width="33%">
+
 ### Frontend
-- **Next.js 15+** (App Router)
-- **TypeScript**
-- **React 19+**
-- **CSS Modules** (minimal styling)
+- Next.js 15+ (App Router)
+- React 19+
+- TypeScript
+- CSS Modules
+
+</td>
+<td width="33%">
 
 ### Backend
-- **NestJS**
-- **Node.js**
-- **Axios** (HTTP client)
-- **In‑memory caching** (upgradeable to Redis)
+- NestJS 11+
+- Node.js
+- Axios
+- In‑memory Cache
+
+</td>
+<td width="33%">
 
 ### Infrastructure
-- **Vercel** (frontend hosting)
-- **Railway** (backend hosting)
-- **Open‑Meteo** (weather data provider)
+- Vercel (Frontend)
+- Railway (Backend)
+- Open‑Meteo API
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────┐
-│  Next.js Client │  (Vercel)
-└────────┬────────┘
-         │ HTTPS
-         ▼
-┌─────────────────┐
-│   NestJS API    │  (Railway)
-└────────┬────────┘
-         │ HTTPS
-         ▼
-┌─────────────────┐
-│ Weather Provider│  (Open‑Meteo)
-└─────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│                    User Interface                       │
+│              (Next.js • Vercel)                        │
+│  ┌─────────────────────────────────────────────────┐  │
+│  │  Search • Autocomplete • Location Detection    │  │
+│  └───────────────────┬─────────────────────────────┘  │
+└──────────────────────┼─────────────────────────────────┘
+                       │ HTTPS / REST API
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│                  Backend Service                        │
+│              (NestJS • Railway)                        │
+│  ┌─────────────────────────────────────────────────┐  │
+│  │  Rate Limiting • Caching • Logging • Validation │  │
+│  └───────────────────┬─────────────────────────────┘  │
+└──────────────────────┼─────────────────────────────────┘
+                       │ Normalized Contract
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│              External Weather Provider                   │
+│              (Open‑Meteo API)                           │
+└─────────────────────────────────────────────────────────┘
 ```
 
-**Core principle:** The frontend never calls the weather provider directly. All data flows through the backend, which normalizes responses into a stable, provider‑agnostic contract.
+**Architecture Principle:** The frontend communicates exclusively with the backend API. All weather data flows through a normalized contract, ensuring provider independence and type safety.
 
 ---
 
-## 🚀 Development Phases
+## 🚀 Development Progress
 
-This project is structured in **9 distinct phases**, from initial setup to production deployment:
+This project follows a structured **9-phase development roadmap**:
 
-1. **Foundations** – Project scaffolding and constraints
-2. **API Contract** – Define the normalized weather schema
-3. **Provider Integration** – Connect to external weather APIs
-4. **Caching & Rate Limits** – Add stability and abuse protection
-5. **Frontend MVP** – Build the search and result UI
-6. **Routing** – Add city‑specific pages
-7. **AI Enhancements** – Intelligent suggestions and insights
-8. **Hardening** – Security, validation, error handling
-9. **Deployment** – Push to production (Railway + Vercel)
+| Phase | Status | Description |
+|:-----:|:------:|-------------|
+| **0** | ✅ | Foundations & Project Setup |
+| **1** | ✅ | API Contract & Domain Model |
+| **2** | ✅ | Weather Provider Integration |
+| **3** | ✅ | Caching & Rate-Limit Protection |
+| **4** | ✅ | Frontend MVP UI |
+| **5** | 🔄 | Routing & City Pages |
+| **6** | 📋 | AI Enhancements |
+| **7** | 📋 | Security Hardening |
+| **8** | 📋 | Deployment Pipeline |
 
-For detailed phase‑by‑phase implementation guidance, see **[AI-WEATHER-DEVELOPMENT.md](./AI-WEATHER-DEVELOPMENT.md)**.
+**Legend:** ✅ Complete | 🔄 In Progress | 📋 Planned
+
+For detailed implementation documentation, see **[AI-WEATHER-DEVELOPMENT.md](./AI-WEATHER-DEVELOPMENT.md)**.
 
 ---
 
@@ -114,12 +159,20 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 
 ## 📝 API Reference
 
-### `GET /weather`
+### Core Endpoints
+
+#### `GET /weather`
+Get current weather by city name.
 
 **Query Parameters:**
-- `city` (string, required): Name of the city
+- `city` (string, required) – City name
 
-**Response:**
+**Example Request:**
+```bash
+GET /weather?city=Tokyo
+```
+
+**Example Response:**
 ```json
 {
   "city": "Tokyo",
@@ -133,34 +186,54 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 }
 ```
 
+#### `GET /weather/coordinates`
+Get weather by geographic coordinates.
+
+**Query Parameters:**
+- `latitude` (number, required)
+- `longitude` (number, required)
+
+#### `GET /weather/search`
+Search for city suggestions (autocomplete).
+
+**Query Parameters:**
+- `query` (string, required) – Search term
+
 **Status Codes:**
 - `200` – Success
-- `400` – Missing or invalid city parameter
-- `404` – City not found
-- `500` – Provider or server error
+- `400` – Invalid parameters
+- `404` – Location not found
+- `429` – Rate limit exceeded
+- `500` – Server error
 
 ---
 
 ## 🎨 Design Philosophy
 
-The UI follows a **minimal, Japanese‑inspired aesthetic**:
+The interface embraces **minimalism with Japanese sensibility**:
 
-- **Calm color palette** – Neutral tones with subtle accents
-- **Clear typography** – Prioritizes readability
-- **No clutter** – Only essential information displayed
-- **Responsive** – Works across devices
+> *"If the design distracts from the data, it's wrong."*
 
-*"If the design distracts from the data, it's wrong."*
+### Design Principles
+
+- 🎨 **Calm Color Palette** – Neutral gradients with subtle blue accents
+- 📝 **Clear Typography** – Geist Sans for optimal readability
+- 🧹 **No Clutter** – Only essential weather data displayed
+- 📱 **Fully Responsive** – Seamless experience across all devices
+- ⚡ **Fast & Smooth** – Optimized animations and transitions
+- 🔍 **Intuitive UX** – Autocomplete, location detection, clear error states
 
 ---
 
 ## 🔒 Security & Best Practices
 
-- **CORS enforcement** – Backend restricts origins via `FRONTEND_ORIGIN`
-- **Input validation** – City parameters sanitized before processing
-- **Error sanitization** – No provider details leaked to frontend
-- **Rate limiting** – (Planned) Middleware to prevent abuse
-- **No exposed secrets** – API keys never reach the browser
+- 🔐 **CORS Protection** – Strict origin validation
+- ✅ **Input Validation** – DTO-based validation with class-validator
+- 🛡️ **Error Sanitization** – No internal details exposed to clients
+- ⏱️ **Rate Limiting** – Per-IP throttling (20 requests/minute)
+- 🔑 **Secret Management** – API keys never exposed to frontend
+- 📊 **Request Logging** – Sanitized logging for monitoring
+- 💾 **Intelligent Caching** – Configurable TTL to reduce provider load
 
 ---
 
@@ -182,27 +255,39 @@ Manual testing checklist available in `AI-WEATHER-DEVELOPMENT.md` (Phase 7).
 
 ---
 
-## 📊 Roadmap
+## 📊 Project Status
 
-**Completed:**
-- ✅ Backend API with normalized contract
-- ✅ Frontend search and result UI
-- ✅ In‑memory caching (15-minute TTL)
-- ✅ CORS and error handling
+### ✅ Completed Features
 
-**Planned:**
-- [ ] Redis-based distributed cache
-- [ ] "AI" insights (smart suggestions, trend analysis)
-- [ ] Saved cities / favorites
-- [ ] PWA support for offline mode
-- [ ] User location detection
-- [ ] Structured logging and monitoring
+- **Backend Infrastructure**
+  - ✅ Normalized API contract with TypeScript types
+  - ✅ Weather provider integration (Open-Meteo)
+  - ✅ Configurable in-memory caching (15-min TTL)
+  - ✅ Rate limiting & request throttling
+  - ✅ Request logging & monitoring
+  - ✅ Error handling & sanitization
+
+- **Frontend Experience**
+  - ✅ Search interface with autocomplete
+  - ✅ Location-based weather detection
+  - ✅ Card-based weather display
+  - ✅ Loading & error states
+  - ✅ Responsive design
+  - ✅ Japanese-inspired minimal UI
+
+### 🚧 Upcoming Features
+
+- 🔄 City-specific routing (`/city/[name]`)
+- 📋 AI-powered weather insights
+- 📋 Saved cities / favorites
+- 📋 PWA support for offline mode
+- 📋 Enhanced monitoring & analytics
 
 ---
 
 ## ⚠️ Disclaimer
 
-This is a **personal project** built for learning and portfolio purposes. It demonstrates clean architecture, modern tooling, and deployment workflows, but is not intended for commercial use without further hardening and scaling considerations.
+This is a **personal learning project** designed to showcase modern full-stack development practices. While the application demonstrates production-ready patterns and architecture, it is not intended for commercial use without additional security hardening, scalability improvements, and comprehensive testing.
 
 ---
 
@@ -212,12 +297,18 @@ See [LICENSE](./LICENSE) for details.
 
 ---
 
-## 🔗 Links
+---
 
-- **Live Demo:** *(Coming soon)*
-- **Documentation:** [AI-WEATHER-DEVELOPMENT.md](./AI-WEATHER-DEVELOPMENT.md)
-- **GitHub:** *(Repository link)*
+<div align="center">
+
+### 📚 Documentation
+
+**[Development Guide](./AI-WEATHER-DEVELOPMENT.md)** • **[Setup Instructions](./INTELLIJ-SETUP.md)**
 
 ---
 
 **Built with ☕ and 静 (calm) in mind.**
+
+*Last updated: January 2025*
+
+</div>
