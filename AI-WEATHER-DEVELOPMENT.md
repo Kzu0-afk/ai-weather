@@ -199,7 +199,7 @@ Each phase should end in something **runnable and stable**, even if visually min
 
 ---
 
-## Phase 5 – Routing & City Pages (Optional Early, Required Before Launch)
+## Phase 5 – Routing & City Pages (Optional Early, Required Before Launch) ✅ **COMPLETED**
 
 - **Goals**
   - Add more structure to the frontend:
@@ -213,6 +213,27 @@ Each phase should end in something **runnable and stable**, even if visually min
 - **Deliverables**
   - Direct links like `/city/Tokyo` work and show weather.
   - Search page can deep‑link to city pages.
+- **Status**: ✅ Complete
+  - **Shared Component**: Extracted `WeatherDisplay` component for reuse across pages
+  - **Dynamic Route**: Created `/city/[name]/page.tsx` as server component with:
+    - Server-side data fetching for SEO optimization
+    - URL encoding/decoding support for city names with spaces/special characters
+    - Dynamic metadata generation per city (title, description)
+  - **Navigation Integration**:
+    - Search page navigates to city pages instead of inline display
+    - Autocomplete suggestions navigate directly to city pages
+    - Location detection navigates to city page after fetching coordinates
+    - Link back to home page from city page header
+  - **Error Handling**: Custom 404 page (`not-found.tsx`) for invalid cities with branded design
+  - **URL Structure**: Clean, shareable URLs like `/city/Tokyo`, `/city/New%20York`
+  - **Files Created/Updated**:
+    - `src/app/components/WeatherDisplay.tsx` (new - shared component)
+    - `src/app/components/WeatherDisplay.module.css` (new)
+    - `src/app/city/[name]/page.tsx` (new - server component)
+    - `src/app/city/[name]/page.module.css` (new)
+    - `src/app/city/[name]/not-found.tsx` (new - custom 404)
+    - `src/app/city/[name]/not-found.module.css` (new)
+    - `src/app/page.tsx` (updated - navigation logic, removed inline display)
 
 ---
 
