@@ -1,21 +1,18 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 import {
-  fetchWeather,
   fetchWeatherByCoordinates,
   searchCities,
   CitySuggestion,
-  WeatherResponse,
 } from "../lib/api";
-import WeatherSkeleton from "./components/WeatherSkeleton";
 
 export default function Home() {
+  const router = useRouter();
   const [city, setCity] = useState("");
-  const [data, setData] = useState<WeatherResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [locationRequested, setLocationRequested] = useState(false);
   const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -29,19 +26,17 @@ export default function Home() {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-          setLoading(true);
           setError(null);
 
           try {
             const result = await fetchWeatherByCoordinates(latitude, longitude);
-            setData(result);
-            setCity(result.city); // Update city input with detected location
+            // Navigate to city page with detected location
+            const citySlug = encodeURIComponent(result.city);
+            router.push(`/city/${citySlug}`);
           } catch (err) {
             const message =
               err instanceof Error ? err.message : "Unable to fetch weather for your location";
             setError(message);
-          } finally {
-            setLoading(false);
           }
         },
         (err) => {
@@ -99,27 +94,27 @@ export default function Home() {
   }, []);
 
   const handleCitySelect = (suggestion: CitySuggestion) => {
-    setCity(suggestion.name);
     setShowSuggestions(false);
     setSuggestions([]);
+    // Navigate directly to city page
+    const citySlug = encodeURIComponent(suggestion.name);
+    router.push(`/city/${citySlug}`);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
+    const trimmedCity = city.trim();
+    
+    if (!trimmedCity) {
+      setError("Please enter a city name.");
+      return;
+    }
+
     setError(null);
 
-    try {
-      const result = await fetchWeather(city);
-      setData(result);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
-      setError(message);
-      setData(null);
-    } finally {
-      setLoading(false);
-    }
+    // Navigate to city page
+    const citySlug = encodeURIComponent(trimmedCity);
+    router.push(`/city/${citySlug}`);
   };
 
   return (
@@ -200,10 +195,9 @@ export default function Home() {
             </div>
             <button
               type="submit"
-              disabled={loading}
-              aria-label={loading ? "Searching for weather" : "Get weather information"}
+              aria-label="Get weather information"
             >
-              {loading ? "Searching…" : "Get weather"}
+              Get weather
             </button>
           </div>
           <p className={styles.hint}>
@@ -215,67 +209,6 @@ export default function Home() {
           <div className={styles.error} role="alert" aria-live="assertive">
             {error}
           </div>
-        )}
-
-        {loading && !data && <WeatherSkeleton />}
-
-        {data && (
-          <section className={styles.result} aria-label="Weather information">
-            <div className={styles.resultHeader}>
-              <div>
-                <h2 className={styles.city}>{data.city}</h2>
-                <p className={styles.meta}>
-                  <span aria-label={`Country: ${data.country}`}>{data.country}</span>
-                  {" · "}
-                  <span aria-label={`Last updated: ${new Date(data.updatedAt).toLocaleString()}`}>
-                    Updated {new Date(data.updatedAt).toLocaleString()}
-                  </span>
-                </p>
-              </div>
-              <div className={styles.condition} aria-label={`Weather condition: ${data.condition}`}>
-                {data.condition}
-              </div>
-            </div>
-
-            <div className={styles.grid} role="grid" aria-label="Weather metrics">
-              <div className={styles.card} role="gridcell">
-                <p className={styles.label}>Temperature</p>
-                <p className={styles.value}>
-                  <span aria-label={`Temperature: ${data.temperature} degrees Celsius`}>
-                    {data.temperature}
-                  </span>
-                  <span className={styles.unit} aria-hidden="true">°C</span>
-                </p>
-              </div>
-              <div className={styles.card} role="gridcell">
-                <p className={styles.label}>Feels like</p>
-                <p className={styles.value}>
-                  <span aria-label={`Feels like: ${data.feelsLike} degrees Celsius`}>
-                    {data.feelsLike}
-                  </span>
-                  <span className={styles.unit} aria-hidden="true">°C</span>
-                </p>
-              </div>
-              <div className={styles.card} role="gridcell">
-                <p className={styles.label}>Humidity</p>
-                <p className={styles.value}>
-                  <span aria-label={`Humidity: ${data.humidity} percent`}>
-                    {data.humidity}
-                  </span>
-                  <span className={styles.unit} aria-hidden="true">%</span>
-                </p>
-              </div>
-              <div className={styles.card} role="gridcell">
-                <p className={styles.label}>Wind</p>
-                <p className={styles.value}>
-                  <span aria-label={`Wind speed: ${data.windSpeed} meters per second`}>
-                    {data.windSpeed}
-                  </span>
-                  <span className={styles.unit} aria-hidden="true">m/s</span>
-                </p>
-              </div>
-            </div>
-          </section>
         )}
       </main>
     </div>
