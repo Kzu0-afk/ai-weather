@@ -9,6 +9,7 @@ import {
   CitySuggestion,
   WeatherResponse,
 } from "../lib/api";
+import WeatherSkeleton from "./components/WeatherSkeleton";
 
 export default function Home() {
   const [city, setCity] = useState("");
@@ -137,7 +138,7 @@ export default function Home() {
           <div className={styles.badge}>Minimal JP</div>
         </header>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} aria-label="Weather search form">
           <label className={styles.label} htmlFor="city">
             City
           </label>
@@ -157,17 +158,34 @@ export default function Home() {
                     setShowSuggestions(true);
                   }
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setShowSuggestions(false);
+                  }
+                }}
                 placeholder="e.g., Kyoto, Sapporo, Osaka"
                 autoComplete="off"
+                aria-label="City name"
+                aria-autocomplete="list"
+                aria-expanded={showSuggestions && suggestions.length > 0}
+                aria-controls={showSuggestions && suggestions.length > 0 ? "city-suggestions" : undefined}
               />
               {showSuggestions && suggestions.length > 0 && (
-                <div ref={suggestionsRef} className={styles.suggestions}>
+                <div
+                  ref={suggestionsRef}
+                  id="city-suggestions"
+                  className={styles.suggestions}
+                  role="listbox"
+                  aria-label="City suggestions"
+                >
                   {suggestions.map((suggestion, index) => (
                     <button
                       key={`${suggestion.name}-${suggestion.countryCode}-${index}`}
                       type="button"
                       className={styles.suggestionItem}
                       onClick={() => handleCitySelect(suggestion)}
+                      role="option"
+                      aria-label={`${suggestion.name}, ${suggestion.country}`}
                     >
                       <span className={styles.suggestionName}>
                         {suggestion.name}
@@ -180,7 +198,11 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <button type="submit" disabled={loading}>
+            <button
+              type="submit"
+              disabled={loading}
+              aria-label={loading ? "Searching for weather" : "Get weather information"}
+            >
               {loading ? "Searching…" : "Get weather"}
             </button>
           </div>
@@ -189,47 +211,67 @@ export default function Home() {
           </p>
         </form>
 
-        {error && <div className={styles.error}>{error}</div>}
+        {error && (
+          <div className={styles.error} role="alert" aria-live="assertive">
+            {error}
+          </div>
+        )}
+
+        {loading && !data && <WeatherSkeleton />}
 
         {data && (
-          <section className={styles.result}>
+          <section className={styles.result} aria-label="Weather information">
             <div className={styles.resultHeader}>
               <div>
-                <p className={styles.city}>{data.city}</p>
+                <h2 className={styles.city}>{data.city}</h2>
                 <p className={styles.meta}>
-                  {data.country} · Updated {new Date(data.updatedAt).toLocaleString()}
+                  <span aria-label={`Country: ${data.country}`}>{data.country}</span>
+                  {" · "}
+                  <span aria-label={`Last updated: ${new Date(data.updatedAt).toLocaleString()}`}>
+                    Updated {new Date(data.updatedAt).toLocaleString()}
+                  </span>
                 </p>
               </div>
-              <div className={styles.condition}>{data.condition}</div>
+              <div className={styles.condition} aria-label={`Weather condition: ${data.condition}`}>
+                {data.condition}
+              </div>
             </div>
 
-            <div className={styles.grid}>
-              <div className={styles.card}>
+            <div className={styles.grid} role="grid" aria-label="Weather metrics">
+              <div className={styles.card} role="gridcell">
                 <p className={styles.label}>Temperature</p>
                 <p className={styles.value}>
-                  {data.temperature}
-                  <span className={styles.unit}>°C</span>
+                  <span aria-label={`Temperature: ${data.temperature} degrees Celsius`}>
+                    {data.temperature}
+                  </span>
+                  <span className={styles.unit} aria-hidden="true">°C</span>
                 </p>
               </div>
-              <div className={styles.card}>
+              <div className={styles.card} role="gridcell">
                 <p className={styles.label}>Feels like</p>
                 <p className={styles.value}>
-                  {data.feelsLike}
-                  <span className={styles.unit}>°C</span>
+                  <span aria-label={`Feels like: ${data.feelsLike} degrees Celsius`}>
+                    {data.feelsLike}
+                  </span>
+                  <span className={styles.unit} aria-hidden="true">°C</span>
                 </p>
               </div>
-              <div className={styles.card}>
+              <div className={styles.card} role="gridcell">
                 <p className={styles.label}>Humidity</p>
                 <p className={styles.value}>
-                  {data.humidity}
-                  <span className={styles.unit}>%</span>
+                  <span aria-label={`Humidity: ${data.humidity} percent`}>
+                    {data.humidity}
+                  </span>
+                  <span className={styles.unit} aria-hidden="true">%</span>
                 </p>
               </div>
-              <div className={styles.card}>
+              <div className={styles.card} role="gridcell">
                 <p className={styles.label}>Wind</p>
                 <p className={styles.value}>
-                  {data.windSpeed}
-                  <span className={styles.unit}>m/s</span>
+                  <span aria-label={`Wind speed: ${data.windSpeed} meters per second`}>
+                    {data.windSpeed}
+                  </span>
+                  <span className={styles.unit} aria-hidden="true">m/s</span>
                 </p>
               </div>
             </div>
