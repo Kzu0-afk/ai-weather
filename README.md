@@ -1,6 +1,6 @@
 <div align="center">
   
-# ☁️ AI Weather (Development Phase) 🇯🇵
+# ☁️ AI Weather (Development Phase)
 
 **A minimal, intelligent weather application with clean architecture**
 
