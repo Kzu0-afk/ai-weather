@@ -108,10 +108,10 @@ This project follows a structured **9-phase development roadmap**:
 | **1** | ✅ | API Contract & Domain Model |
 | **2** | ✅ | Weather Provider Integration |
 | **3** | ✅ | Caching & Rate-Limit Protection |
-| **4** | 🔄 | Frontend MVP UI |
-| **5** | 📋 | Routing & City Pages |
-| **6** | 📋 | AI Enhancements |
-| **7** | 📋 | Security Hardening |
+| **4** | ✅ | Frontend MVP UI |
+| **5** | ✅ | Routing & City Pages |
+| **6** | 🔄 | AI Enhancements |
+| **7** | 🔄 | Security Hardening |
 | **8** | 📋 | Deployment Pipeline |
 
 **Legend:** ✅ Complete | 🔄 In Progress | 📋 Planned
