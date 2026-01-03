@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import WeatherDisplay from "../../components/WeatherDisplay";
+import CitySearch from "../../components/CitySearch";
 import { fetchWeather } from "../../../lib/api";
 import styles from "./page.module.css";
 
@@ -47,6 +48,7 @@ export default async function CityPage({ params }: CityPageProps) {
             <div className={styles.badge}>Minimal JP</div>
           </header>
 
+          <CitySearch initialCity="" />
           <WeatherDisplay data={data} />
         </main>
       </div>

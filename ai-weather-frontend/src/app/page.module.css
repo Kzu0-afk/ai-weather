@@ -127,7 +127,7 @@
   from {
     opacity: 0;
     transform: translateY(-8px);
-  }
+}
   to {
     opacity: 1;
     transform: translateY(0);
@@ -220,7 +220,7 @@
   from {
     opacity: 0;
     transform: translateY(-8px);
-  }
+}
   to {
     opacity: 1;
     transform: translateY(0);
@@ -280,7 +280,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
-}
+  }
 
 .card {
   border: 1px solid #e5e7eb;
@@ -304,7 +304,7 @@
   color: #0f172a;
   line-height: 1.2;
   margin-top: 4px;
-}
+  }
 
 .unit {
   font-size: 14px;
@@ -380,6 +380,28 @@
   .suggestions {
     max-height: 200px;
   }
+}
+
+.locationWeather {
+  margin-top: 8px;
+}
+
+.locationHeader {
+  margin-bottom: 12px;
+}
+
+.locationTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.locationLoading {
+  padding: 16px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
 }
 
 @media (max-width: 480px) {
