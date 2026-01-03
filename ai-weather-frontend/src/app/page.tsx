@@ -101,18 +101,42 @@ export default function Home() {
     router.push(`/city/${citySlug}`);
   };
 
+  const validateCity = (cityName: string): string | null => {
+    const trimmed = cityName.trim();
+    
+    if (!trimmed) {
+      return "Please enter a city name.";
+    }
+    
+    if (trimmed.length > 100) {
+      return "City name is too long (maximum 100 characters).";
+    }
+    
+    if (trimmed.length < 1) {
+      return "City name cannot be empty.";
+    }
+    
+    // Check for potentially malicious patterns (basic sanitization)
+    if (/[<>{}[\]\\]/.test(trimmed)) {
+      return "City name contains invalid characters.";
+    }
+    
+    return null;
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const trimmedCity = city.trim();
     
-    if (!trimmedCity) {
-      setError("Please enter a city name.");
+    const validationError = validateCity(city);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     setError(null);
 
     // Navigate to city page
+    const trimmedCity = city.trim();
     const citySlug = encodeURIComponent(trimmedCity);
     router.push(`/city/${citySlug}`);
   };
@@ -144,9 +168,15 @@ export default function Home() {
                 id="city"
                 name="city"
                 value={city}
+                maxLength={100}
                 onChange={(event) => {
-                  setCity(event.target.value);
+                  const value = event.target.value;
+                  setCity(value);
                   setShowSuggestions(true);
+                  // Clear error when user starts typing
+                  if (error) {
+                    setError(null);
+                  }
                 }}
                 onFocus={() => {
                   if (suggestions.length > 0) {
@@ -164,6 +194,7 @@ export default function Home() {
                 aria-autocomplete="list"
                 aria-expanded={showSuggestions && suggestions.length > 0}
                 aria-controls={showSuggestions && suggestions.length > 0 ? "city-suggestions" : undefined}
+                aria-invalid={error ? "true" : "false"}
               />
               {showSuggestions && suggestions.length > 0 && (
                 <div
