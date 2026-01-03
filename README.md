@@ -1,10 +1,13 @@
 <div align="center">
+
+# AI Weather
   
 # ☁️ AI Weather (Development Phase)
 
+
 **A minimal, intelligent weather application with clean architecture**
 
-*Built with Next.js & NestJS • Deployed on Vercel & Railway*
+*Next.js + NestJS • TypeScript end-to-end • Vercel + Railway*
 
 [![Next.js](https://img.shields.io/badge/Next.js-15+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-11+-red?style=flat-square&logo=nestjs)](https://nestjs.com/)
@@ -14,21 +17,19 @@
 
 ---
 
----
-
 ## 📖 Overview
 
 AI Weather is a **full‑stack weather application** that demonstrates modern web development practices through clean architecture, type safety, and thoughtful design. The project showcases a complete development workflow from initial setup to production deployment.
 
 ### ✨ Key Features
 
-- 🌍 **Provider‑Agnostic Architecture** – Backend abstracts weather APIs, exposing a stable contract
-- 🎯 **Type‑Safe End‑to‑End** – TypeScript across frontend and backend with shared domain models
-- ⚡ **Performance Optimized** – Intelligent caching, rate limiting, and request optimization
-- 🎨 **Minimal Japanese Design** – Clean, calm interface prioritizing clarity over decoration
-- 🔒 **Production Ready** – Security, error handling, and monitoring built-in
-- 📍 **Smart Location Detection** – Automatic weather fetching based on user location
-- 🔍 **Intelligent Autocomplete** – Real-time city suggestions as you type
+- **Provider‑Agnostic Architecture** – Frontend talks only to the backend; provider details stay hidden
+- **Type‑Safe End‑to‑End** – TypeScript across frontend and backend with a stable contract
+- **Fast & Resilient** – Caching + rate limiting + timeouts to keep responses stable
+- **Minimal JP UI** – Calm, clean design focused on clarity
+- **Location Weather** – Optional geolocation to show local conditions (with consent)
+- **Autocomplete Search** – City suggestions while typing
+- **Shareable City Pages** – Clean routes like `/city/Tokyo`
 
 ---
 
@@ -110,9 +111,10 @@ This project follows a structured **9-phase development roadmap**:
 | **3** | ✅ | Caching & Rate-Limit Protection |
 | **4** | ✅ | Frontend MVP UI |
 | **5** | ✅ | Routing & City Pages |
-| **6** | 🔄 | AI Enhancements |
-| **7** | 🔄 | Security Hardening |
+| **6** | 📋 | AI Enhancements |
+| **7** | ✅ | Hardening, Security & Observability |
 | **8** | 📋 | Deployment Pipeline |
+| **9** | 📋 | Post‑MVP Improvements |
 
 **Legend:** ✅ Complete | 🔄 In Progress | 📋 Planned
 
@@ -249,7 +251,7 @@ cd ai-weather-frontend
 npm run lint
 ```
 
-Manual testing checklist available in `AI-WEATHER-DEVELOPMENT.md` (Phase 7).
+Manual testing checklist: `TESTING-CHECKLIST.md`.
 
 ---
 
@@ -269,14 +271,16 @@ Manual testing checklist available in `AI-WEATHER-DEVELOPMENT.md` (Phase 7).
   - ✅ Search interface with autocomplete
   - ✅ Location-based weather detection
   - ✅ Card-based weather display
+  - ✅ City pages with built-in search
   - ✅ Loading & error states
+  - ✅ Global error boundary for graceful failures
   - ✅ Responsive design
   - ✅ Japanese-inspired minimal UI
 
 ### 🚧 Upcoming Features
 
-- 🔄 City-specific routing (`/city/[name]`)
 - 📋 AI-powered weather insights
+- 📋 Deployment pipeline (Railway + Vercel)
 - 📋 Saved cities / favorites
 - 📋 PWA support for offline mode
 - 📋 Enhanced monitoring & analytics
@@ -285,7 +289,7 @@ Manual testing checklist available in `AI-WEATHER-DEVELOPMENT.md` (Phase 7).
 
 ## ⚠️ Disclaimer
 
-This is a **personal learning project** designed to showcase modern full-stack development practices. While the application demonstrates production-ready patterns and architecture, it is not intended for commercial use without additional security hardening, scalability improvements, and comprehensive testing.
+This is a **personal learning project** designed to showcase modern full-stack development practices. While the application demonstrates production-ready patterns, it is not intended for commercial use without additional scalability improvements and deeper security review.
 
 ---
 
@@ -307,6 +311,6 @@ See [LICENSE](./LICENSE) for details.
 
 **Built with ☕ and 静 (calm) in mind.**
 
-*Last updated: January 2025*
+*Last updated: January 2026*
 
 </div>
