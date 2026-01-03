@@ -1,7 +1,8 @@
-<div align="center">  
-  
-# ☁️ AI Weather (Development Phase)
+<div align="center">
 
+# AI Weather
+
+**Development Phase**
 
 **A minimal, intelligent weather application with clean architecture**
 
@@ -15,11 +16,11 @@
 
 ---
 
-## 📖 Overview
+## Overview
 
 AI Weather is a **full‑stack weather application** that demonstrates modern web development practices through clean architecture, type safety, and thoughtful design. The project showcases a complete development workflow from initial setup to production deployment.
 
-### ✨ Key Features
+### Key Features
 
 - **Provider‑Agnostic Architecture** – Frontend talks only to the backend; provider details stay hidden
 - **Type‑Safe End‑to‑End** – TypeScript across frontend and backend with a stable contract
@@ -31,7 +32,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 <table>
 <tr>
@@ -66,7 +67,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -97,7 +98,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 
 ---
 
-## 🚀 Development Progress
+## Development Progress
 
 This project follows a structured **9-phase development roadmap**:
 
@@ -120,7 +121,7 @@ For detailed implementation documentation, see **[AI-WEATHER-DEVELOPMENT.md](./A
 
 ---
 
-## 📦 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -155,7 +156,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 
 ---
 
-## 📝 API Reference
+## API Reference
 
 ### Core Endpoints
 
@@ -206,7 +207,7 @@ Search for city suggestions (autocomplete).
 
 ---
 
-## 🎨 Design Philosophy
+## Design Philosophy
 
 The interface embraces **minimalism with Japanese sensibility**:
 
@@ -214,28 +215,28 @@ The interface embraces **minimalism with Japanese sensibility**:
 
 ### Design Principles
 
-- 🎨 **Calm Color Palette** – Neutral gradients with subtle blue accents
-- 📝 **Clear Typography** – Geist Sans for optimal readability
-- 🧹 **No Clutter** – Only essential weather data displayed
-- 📱 **Fully Responsive** – Seamless experience across all devices
-- ⚡ **Fast & Smooth** – Optimized animations and transitions
-- 🔍 **Intuitive UX** – Autocomplete, location detection, clear error states
+- **Calm color palette** – Neutral gradients with subtle blue accents
+- **Clear typography** – Geist Sans for optimal readability
+- **No clutter** – Only essential weather data displayed
+- **Fully responsive** – Seamless experience across all devices
+- **Fast & smooth** – Optimized animations and transitions
+- **Intuitive UX** – Autocomplete, location detection, clear error states
 
 ---
 
-## 🔒 Security & Best Practices
+## Security & Best Practices
 
-- 🔐 **CORS Protection** – Strict origin validation
-- ✅ **Input Validation** – DTO-based validation with class-validator
-- 🛡️ **Error Sanitization** – No internal details exposed to clients
-- ⏱️ **Rate Limiting** – Per-IP throttling (20 requests/minute)
-- 🔑 **Secret Management** – API keys never exposed to frontend
-- 📊 **Request Logging** – Sanitized logging for monitoring
-- 💾 **Intelligent Caching** – Configurable TTL to reduce provider load
+- **CORS protection** – Strict origin validation
+- **Input validation** – DTO-based validation with class-validator
+- **Error sanitization** – No internal details exposed to clients
+- **Rate limiting** – Per-IP throttling (20 requests/minute)
+- **Secret management** – API keys never exposed to frontend
+- **Request logging** – Sanitized logging for monitoring
+- **Intelligent caching** – Configurable TTL to reduce provider load
 
 ---
 
-## 🧪 Testing
+## Testing
 
 Run backend tests:
 ```bash
@@ -253,9 +254,9 @@ Manual testing checklist: `TESTING-CHECKLIST.md`.
 
 ---
 
-## 📊 Project Status
+## Project Status
 
-### ✅ Completed Features
+### Completed Features
 
 - **Backend Infrastructure**
   - ✅ Normalized API contract with TypeScript types
@@ -275,7 +276,7 @@ Manual testing checklist: `TESTING-CHECKLIST.md`.
   - ✅ Responsive design
   - ✅ Japanese-inspired minimal UI
 
-### 🚧 Upcoming Features
+### Upcoming Features
 
 - 📋 AI-powered weather insights
 - 📋 Deployment pipeline (Railway + Vercel)
@@ -285,13 +286,13 @@ Manual testing checklist: `TESTING-CHECKLIST.md`.
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This is a **personal learning project** designed to showcase modern full-stack development practices. While the application demonstrates production-ready patterns, it is not intended for commercial use without additional scalability improvements and deeper security review.
 
 ---
 
-## 📄 License
+## License
 
 See [LICENSE](./LICENSE) for details.
 
@@ -301,13 +302,13 @@ See [LICENSE](./LICENSE) for details.
 
 <div align="center">
 
-### 📚 Documentation
+### Documentation
 
 **[Development Guide](./AI-WEATHER-DEVELOPMENT.md)** • **[Setup Instructions](./INTELLIJ-SETUP.md)**
 
 ---
 
-**Built with ☕ and 静 (calm) in mind.**
+**Built with calm (静) in mind.**
 
 *Last updated: January 2026*
 
