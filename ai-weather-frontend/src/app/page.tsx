@@ -7,13 +7,17 @@ import {
   fetchWeatherByCoordinates,
   searchCities,
   CitySuggestion,
+  WeatherResponse,
 } from "../lib/api";
+import WeatherDisplay from "./components/WeatherDisplay";
 
 export default function Home() {
   const router = useRouter();
   const [city, setCity] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [locationRequested, setLocationRequested] = useState(false);
+  const [locationWeather, setLocationWeather] = useState<WeatherResponse | null>(null);
+  const [locationLoading, setLocationLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -23,6 +27,7 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== "undefined" && "geolocation" in navigator && !locationRequested) {
       setLocationRequested(true);
+      setLocationLoading(true);
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
@@ -30,19 +35,21 @@ export default function Home() {
 
           try {
             const result = await fetchWeatherByCoordinates(latitude, longitude);
-            // Navigate to city page with detected location
-            const citySlug = encodeURIComponent(result.city);
-            router.push(`/city/${citySlug}`);
+            // Display location weather on home page (don't navigate)
+            setLocationWeather(result);
+            setLocationLoading(false);
           } catch (err) {
             const message =
               err instanceof Error ? err.message : "Unable to fetch weather for your location";
             setError(message);
+            setLocationLoading(false);
           }
         },
         (err) => {
           // User denied location or error occurred - silently fail, user can search manually
           console.log("Location access denied or error:", err.message);
           setLocationRequested(true); // Mark as requested to prevent retry
+          setLocationLoading(false);
         },
         {
           enableHighAccuracy: true,
@@ -239,6 +246,21 @@ export default function Home() {
         {error && (
           <div className={styles.error} role="alert" aria-live="assertive">
             {error}
+          </div>
+        )}
+
+        {locationLoading && (
+          <div className={styles.locationLoading}>
+            Detecting your location...
+          </div>
+        )}
+
+        {locationWeather && (
+          <div className={styles.locationWeather}>
+            <div className={styles.locationHeader}>
+              <h2 className={styles.locationTitle}>Your Location</h2>
+            </div>
+            <WeatherDisplay data={locationWeather} />
           </div>
         )}
       </main>
