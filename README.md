@@ -1,7 +1,4 @@
-<div align="center">
-
-# AI Weather
-  
+<div align="center">  
 # ☁️ AI Weather (Development Phase)
 
 
