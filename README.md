@@ -1,7 +1,9 @@
-
 <div align="center">
 
 # AI Weather
+  
+# ☁️ AI Weather (Development Phase)
+
 
 **A minimal, intelligent weather application with clean architecture**
 
