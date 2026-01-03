@@ -256,7 +256,7 @@ Each phase should end in something **runnable and stable**, even if visually min
 
 ---
 
-## Phase 7 – Hardening, Security & Observability
+## Phase 7 – Hardening, Security & Observability ✅ **COMPLETED**
 
 - **Goals**
   - Make the app resilient and safe enough for public internet.
@@ -271,12 +271,32 @@ Each phase should end in something **runnable and stable**, even if visually min
 - **Frontend Hardening**
   - Prevent empty submits; show clear inline errors.
   - Ensure loading, error, and “no data” states are visually distinct.
+  - Add error boundaries for unexpected runtime errors.
 - **Testing**
   - Manual tests with different cities (valid, invalid, non‑ASCII).
   - Basic e2e smoke test (script or manual checklist) for:
     - Load → search → view result → navigate to city route.
 - **Deliverables**
   - Stable app that fails **gracefully** under bad input or provider outages.
+- **Status**: ✅ Complete
+  - **Frontend Hardening**
+    - Added global React error boundary wrapper to prevent hard crashes:
+      - `ai-weather-frontend/src/app/components/ErrorBoundary.tsx` (new)
+      - `ai-weather-frontend/src/app/components/ErrorBoundary.module.css` (new)
+      - `ai-weather-frontend/src/app/layout.tsx` (wrapped app in `ErrorBoundary`)
+    - Added client-side city validation for better UX (length, empty input, basic invalid characters).
+  - **UX Fixes / Reliability**
+    - Location auto-detection no longer blocks manual search:
+      - Home page now **displays** detected-location weather instead of auto-navigating.
+    - City pages now include a search bar (with autocomplete) so you can search again without returning home:
+      - `ai-weather-frontend/src/app/components/CitySearch.tsx` (new)
+      - `ai-weather-frontend/src/app/components/CitySearch.module.css` (new)
+      - `ai-weather-frontend/src/app/city/[name]/page.tsx` (renders `CitySearch`)
+  - **Testing Documentation**
+    - Added comprehensive manual testing checklist:
+      - `TESTING-CHECKLIST.md` (new)
+  - **Backend Verification**
+    - DTO validation, rate limiting, CORS restriction, and sanitized logging are confirmed as implemented from earlier phases.
 
 ---
 
