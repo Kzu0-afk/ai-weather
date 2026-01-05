@@ -4,7 +4,7 @@
 
 **Development Phase yr. 25-26**
 
-**A minimal, intelligent weather application with clean architecture**
+**[ A minimal, intelligent weather application with clean architecture ]**
 
 *Next.js + NestJS • TypeScript end-to-end • Vercel + Railway*
 
