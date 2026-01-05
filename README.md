@@ -1,6 +1,6 @@
 <div align="center">
 
-# AI Weather BETA
+# AI Weather (beta)
 
 **Development Phase yr. 25-26**
 
