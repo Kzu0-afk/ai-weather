@@ -2,7 +2,7 @@
 
 # AI Weather BETA
 
-**Development Phase y. 25-26**
+**Development Phase yr. 25-26**
 
 **A minimal, intelligent weather application with clean architecture**
 
