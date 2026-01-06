@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -18,13 +18,17 @@ export const metadata: Metadata = {
   description: "A minimal, intelligent weather application with clean architecture. Search by city for essential weather data—temperature, humidity, wind, and conditions.",
   keywords: ["weather", "forecast", "weather app", "weather API", "climate"],
   authors: [{ name: "AI Weather" }],
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#f4f7fb",
   openGraph: {
     title: "AI Weather | Find calm, clear forecasts",
     description: "A minimal, intelligent weather application with clean architecture.",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#f4f7fb",
 };
 
 export default function RootLayout({
