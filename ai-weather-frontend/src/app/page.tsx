@@ -234,6 +234,7 @@ export default function Home() {
             <button
               type="submit"
               aria-label="Get weather information"
+              className={styles.submitButton}
             >
               Get weather
             </button>
