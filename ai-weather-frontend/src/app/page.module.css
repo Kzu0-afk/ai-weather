@@ -175,7 +175,7 @@
   font-size: 13px;
 }
 
-.inputRow button {
+.submitButton {
   padding: 12px 18px;
   border: none;
   border-radius: 12px;
@@ -187,17 +187,17 @@
   min-width: 140px;
 }
 
-.inputRow button:disabled {
+.submitButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.inputRow button:not(:disabled):hover {
+.submitButton:not(:disabled):hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
 }
 
-.inputRow button:not(:disabled):focus-visible {
+.submitButton:not(:disabled):focus-visible {
   outline: 3px solid rgba(59, 130, 246, 0.5);
   outline-offset: 2px;
 }
@@ -333,7 +333,7 @@
     flex-direction: column;
   }
 
-  .inputRow button {
+  .submitButton {
     width: 100%;
     padding: 14px 18px;
     font-size: 16px;
