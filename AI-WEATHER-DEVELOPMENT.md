@@ -325,6 +325,28 @@ Each phase should end in something **runnable and stable**, even if visually min
     - Backend API.
     - Frontend app.
 
+- **Status**: 🔄 In Progress (deployment prep completed; hosting integration pending)
+  - **Phase 8 Improvements Implemented (Deployment-Ready Prep)**
+    - **Next.js build warnings resolved**:
+      - Moved `viewport` / `themeColor` from `metadata` → `export const viewport` in `ai-weather-frontend/src/app/layout.tsx`
+      - Confirmed frontend production build succeeds without warnings
+    - **Backend production start made hosting-safe**:
+      - Updated `ai-weather-backend/package.json` so `npm start` runs `node dist/main` (recommended for Railway)
+    - **Health endpoint added for hosting checks**:
+      - Added `GET /health` in `ai-weather-backend/src/app.controller.ts`
+    - **Environment templates added** (to guide Railway/Vercel env vars):
+      - `ai-weather-backend/env.example`
+      - `ai-weather-frontend/env.local.example`
+    - **Git safety**:
+      - Added root `.gitignore` to prevent committing any `**/.env*` files
+  - **Remaining (Hosting Service Integration Not Done Yet)**
+    - Create Railway project and deploy `ai-weather-backend`
+    - Create Vercel project and deploy `ai-weather-frontend`
+    - Configure production environment variables on both platforms
+    - Verify production endpoints:
+      - Backend: `/health`, `/weather?city=Tokyo`, rate limit (429)
+      - Frontend: home, autocomplete, location weather (consent), `/city/[name]`
+
 ---
 
 ## Phase 9 – Next-Level Improvements (Post-MVP)
