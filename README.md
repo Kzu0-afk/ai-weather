@@ -110,9 +110,9 @@ This project follows a structured **9-phase development roadmap**:
 | **3** | ✅ | Caching & Rate-Limit Protection |
 | **4** | ✅ | Frontend MVP UI |
 | **5** | ✅ | Routing & City Pages |
-| **6** | 📋 | AI Enhancements |
+| **6** | ⏳ | AI Enhancements |
 | **7** | ✅ | Hardening, Security & Observability |
-| **8** | 📋 | Deployment Pipeline |
+| **8** | ⏳ | Deployment Pipeline |
 | **9** | 📋 | Post‑MVP Improvements |
 
 **Legend:** ✅ Complete | 🔄 In Progress | 📋 Planned
