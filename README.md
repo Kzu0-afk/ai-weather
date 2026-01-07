@@ -1,6 +1,6 @@
 <div align="center">
 
-# AI Weather (beta)
+# AI Weather
 
 **Development Phase yr. 25-26 (December 2025 - PRESENT)**
 
