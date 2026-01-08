@@ -56,7 +56,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 </td>
 <td width="33%">
 
-### Infrastructure
+### Infrastructure / Architecture
 - Vercel (Frontend)
 - Railway (Backend)
 - Open‑Meteo API
