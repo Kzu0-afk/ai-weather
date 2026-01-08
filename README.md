@@ -98,7 +98,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 
 ---
 
-## Development Progress
+## Development Progress Tracking
 
 This project follows a structured **9-phase development roadmap**:
 
