@@ -32,7 +32,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 
 ---
 
-## Tech Stack
+## Tech Stacks
 
 <table>
 <tr>
