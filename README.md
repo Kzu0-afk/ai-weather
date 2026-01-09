@@ -1,6 +1,6 @@
 <div align="center">
 
-# AI-Weather
+# AI-Weather 1.0
 
 **Development Phase yr. 25-26 (December 2025 - PRESENT)**
 
