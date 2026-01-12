@@ -16,7 +16,7 @@
 
 ---
 
-## Description // Overview
+## Description
 
 AI Weather is a **full‑stack weather application** that demonstrates modern web development practices through clean architecture, type safety, and thoughtful design. The project showcases a complete development workflow from initial setup to production deployment.
 
