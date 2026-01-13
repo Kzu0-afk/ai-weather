@@ -321,21 +321,26 @@ Each phase should end in something **runnable and stable**, even if visually min
       - Moved `viewport` / `themeColor` from `metadata` → `export const viewport` in `ai-weather-frontend/src/app/layout.tsx`
       - Confirmed frontend production build succeeds without warnings
     - **Backend production start made hosting-safe**:
-      - Updated `ai-weather-backend/package.json` so `npm start` runs `node dist/main` (recommended for Railway)
+      - Updated `ai-weather-backend/package.json` so `npm start` runs `node dist/main` (recommended for Railway, ready if needed later)
     - **Health endpoint added for hosting checks**:
       - Added `GET /health` in `ai-weather-backend/src/app.controller.ts`
-    - **Environment templates added** (to guide Railway/Vercel env vars):
+    - **Environment templates added** (to guide Vercel env vars):
       - `ai-weather-backend/env.example`
       - `ai-weather-frontend/env.local.example`
     - **Git safety**:
       - Added root `.gitignore` to prevent committing any `**/.env*` files
-  - **Remaining (Hosting Service Integration Not Done Yet)**
-    - Create Railway project and deploy `ai-weather-backend`
+  - **Remaining (Vercel Hosting Integration Not Done Yet)**
     - Create Vercel project and deploy `ai-weather-frontend`
-    - Configure production environment variables on both platforms
-    - Verify production endpoints:
-      - Backend: `/health`, `/weather?city=Tokyo`, rate limit (429)
-      - Frontend: home, autocomplete, location weather (consent), `/city/[name]`
+    - Configure production environment variables on Vercel:
+      - `NEXT_PUBLIC_API_BASE_URL` (pointing to local backend or production backend if available)
+    - Verify production frontend:
+      - Home page loads and search works
+      - Autocomplete dropdown functions correctly
+      - Location weather detection works (with user consent)
+      - City pages (`/city/[name]`) work correctly
+      - Favorites and recent searches persist (localStorage)
+      - PWA installability works in production
+      - Service worker registers successfully
 
 ---
 
@@ -374,114 +379,40 @@ Each phase should end in something **runnable and stable**, even if visually min
   - App can be installed as a PWA
 - **Status**: ✅ Complete
   - **Favorites System**:
-    - **Storage Layer** (`src/lib/storage.ts`):
-      - `getFavorites()` - Retrieves all favorited cities from localStorage
-      - `addFavorite(city)` - Adds city to favorites (max 20, auto-removes oldest)
-      - `removeFavorite(cityName, countryCode)` - Removes city from favorites
-      - `isFavorite(cityName, countryCode)` - Checks if city is favorited
-      - Uses `ai-weather-favorites` localStorage key
-    - **UI Components**:
-      - `FavoritesList.tsx` - Displays favorites list on home page
-        - Cross-tab synchronization via `storage` event listener
-        - Clickable items navigate to city pages
-        - Remove button (×) for each favorite
-        - Only renders if favorites exist
-      - `WeatherDisplay.tsx` - Added star button (☆/★) next to city name
-        - Toggles favorite status on click
-        - Visual feedback (filled star = favorited)
-        - Optional `showFavoriteButton` prop (default: true)
-    - **Integration**: Home page (`page.tsx`) renders `FavoritesList` component
+    - `src/lib/storage.ts` - localStorage utilities for favorites and recent searches
+    - `src/app/components/FavoritesList.tsx` - Favorites display component
+    - `src/app/components/WeatherDisplay.tsx` - Added star button for favoriting
+    - Home page displays favorites list
   - **Recent Searches**:
-    - **Storage Layer** (`src/lib/storage.ts`):
-      - `getRecentSearches()` - Retrieves recent searches from localStorage
-      - `addRecentSearch(city)` - Adds city to recent searches (max 10)
-        - Moves existing city to top if already in list
-        - Automatically limits to 10 most recent
-      - `clearRecentSearches()` - Clears all recent searches
-      - Uses `ai-weather-recent-searches` localStorage key
-    - **UI Components**:
-      - `RecentSearches.tsx` - Displays recent searches list on home page
-        - Cross-tab synchronization via `storage` event listener
-        - Clickable items navigate to city pages
-        - "Clear" button with confirmation dialog
-        - Only renders if recent searches exist
-      - `CityWeatherWrapper.tsx` - Client wrapper for city pages
-        - Automatically calls `addRecentSearch()` when city page loads
-        - Wraps `WeatherDisplay` component for server/client boundary
-    - **Integration**: 
-      - Home page (`page.tsx`) renders `RecentSearches` component
-      - City pages (`city/[name]/page.tsx`) use `CityWeatherWrapper` instead of direct `WeatherDisplay`
+    - `src/app/components/RecentSearches.tsx` - Recent searches display component
+    - `src/app/components/CityWeatherWrapper.tsx` - Automatically adds cities to recent searches
+    - Home page displays recent searches list
   - **PWA Implementation**:
-    - **Web App Manifest** (`public/manifest.json`):
-      - App name: "AI Weather"
-      - Short name: "AI Weather"
-      - Display mode: standalone
-      - Theme color: #f4f7fb (matches app background)
-      - Start URL: "/"
-      - Icons: Uses existing favicon.ico
-    - **Service Worker** (`public/sw.js`):
-      - Cache name: `ai-weather-v1`
-      - **Caching Strategy**: Network-first for all requests
-      - **Static Assets**: Caches home page and city routes
-      - **API Calls**: Always fetches fresh (no caching of weather API endpoints)
-      - **Offline Fallback**: Falls back to cached pages when offline
-      - **Cache Management**: Auto-cleans old caches on activation
-    - **Registration**:
-      - `ServiceWorkerRegistration.tsx` - Client component that registers SW on mount
-      - Registered in `layout.tsx` via component inclusion
-      - Only registers if `serviceWorker` is available in navigator
-    - **Metadata** (`layout.tsx`):
-      - Added `manifest` link in metadata
-      - Added `appleWebApp` metadata for iOS support
-      - Theme color configured in viewport
+    - `public/manifest.json` - Web app manifest
+    - `public/sw.js` - Service worker for offline caching
+    - `src/app/components/ServiceWorkerRegistration.tsx` - Client-side service worker registration
+    - `src/app/layout.tsx` - Updated metadata with PWA support
   - **Location UX Enhancement**:
-    - **Improved Loading State** (`page.tsx`):
-      - Enhanced loading message: "Detecting your location..."
-      - Added helpful hint: "Allow location access to see weather for your current location"
-      - Better visual structure with flex layout
-    - **Accessibility**:
-      - Added `role="status"` and `aria-live="polite"` to loading state
-      - Improved semantic structure for screen readers
+    - Improved loading message with helpful hint text
+    - Better accessibility attributes
   - **Files Created/Updated**:
-    - **New Files**:
-      - `src/lib/storage.ts` - localStorage utilities (favorites & recent searches)
-      - `src/app/components/FavoritesList.tsx` - Favorites list component
-      - `src/app/components/FavoritesList.module.css` - Favorites list styles
-      - `src/app/components/RecentSearches.tsx` - Recent searches component
-      - `src/app/components/RecentSearches.module.css` - Recent searches styles
-      - `src/app/components/CityWeatherWrapper.tsx` - Client wrapper for city pages (handles recent search tracking)
-      - `src/app/components/ServiceWorkerRegistration.tsx` - Service worker registration component
-      - `public/manifest.json` - Web app manifest for PWA
-      - `public/sw.js` - Service worker for offline caching
-    - **Updated Files**:
-      - `src/app/components/WeatherDisplay.tsx` - Added favorite button (star icon) with toggle functionality
-      - `src/app/components/WeatherDisplay.module.css` - Added styles for favorite button and cityRow layout
-      - `src/app/page.tsx` - Integrated `FavoritesList` and `RecentSearches` components, enhanced location loading UI
-      - `src/app/page.module.css` - Enhanced location loading styles with hint text
-      - `src/app/city/[name]/page.tsx` - Replaced direct `WeatherDisplay` with `CityWeatherWrapper` for recent search tracking
-      - `src/app/layout.tsx` - Added PWA metadata (manifest, appleWebApp), integrated `ServiceWorkerRegistration`
-  - **Technical Implementation Notes**:
-    - **localStorage Keys**: 
-      - `ai-weather-favorites` - Stores array of `SavedCity` objects
-      - `ai-weather-recent-searches` - Stores array of `SavedCity` objects
-    - **Data Structure** (`SavedCity` interface):
-      ```typescript
-      {
-        name: string;
-        country: string;
-        countryCode: string;
-        savedAt: string; // ISO 8601 timestamp
-      }
-      ```
-    - **Cross-Tab Sync**: Both `FavoritesList` and `RecentSearches` listen to `storage` events to sync changes across browser tabs
-    - **Service Worker Scope**: Service worker is registered at root (`/sw.js`) and controls all routes
-    - **Offline Behavior**: When offline, cached pages are served; API calls fail gracefully (no mock data per user rules)
-    - **PWA Installability**: App can be installed on:
-      - Desktop browsers (Chrome, Edge, Safari)
-      - Mobile devices (iOS Safari, Android Chrome)
-      - Appears in browser's install prompt when criteria are met
+    - `src/lib/storage.ts` (new)
+    - `src/app/components/FavoritesList.tsx` (new)
+    - `src/app/components/FavoritesList.module.css` (new)
+    - `src/app/components/RecentSearches.tsx` (new)
+    - `src/app/components/RecentSearches.module.css` (new)
+    - `src/app/components/CityWeatherWrapper.tsx` (new)
+    - `src/app/components/ServiceWorkerRegistration.tsx` (new)
+    - `src/app/components/WeatherDisplay.tsx` (updated - added favorite button)
+    - `src/app/components/WeatherDisplay.module.css` (updated - favorite button styles)
+    - `src/app/page.tsx` (updated - added favorites and recent searches)
+    - `src/app/page.module.css` (updated - location loading styles)
+    - `src/app/city/[name]/page.tsx` (updated - uses CityWeatherWrapper)
+    - `src/app/layout.tsx` (updated - PWA metadata and service worker)
+    - `public/manifest.json` (new)
+    - `public/sw.js` (new)
 
-**Note**: Backend hosting (Railway) was skipped due to free trial expiration. Frontend hosting (Vercel) will be set up next.
+**Note**: Backend hosting (Railway) was skipped due to free trial expiration. Frontend hosting (Vercel) is ready to be set up in Phase 8.
 
 This roadmap should be kept up to date as architecture evolves; every significant change should touch this file so it remains the single source of truth for **how** AI Weather is built and shipped.
 
