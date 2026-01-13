@@ -284,49 +284,63 @@ Each phase should end in something **runnable and stable**, even if visually min
 ## Phase 8 – Deployment Pipeline
 
 - **Goals**
-  - Deploy both backend and frontend with repeatable steps.
-- **Backend – Railway**
-  - Push backend to GitHub.
-  - Create Railway project and connect the repo.
-  - Configure environment variables:
-    - `PORT`
-    - `FRONTEND_ORIGIN` (comma‑separated if multiple).
-    - Any provider‑specific settings if added later.
-  - Deploy and verify:
-    - `https://your-backend.up.railway.app/weather?city=Tokyo`
+  - Deploy frontend to production hosting (Vercel).
+  - **Note**: Backend hosting (Railway) skipped due to free trial expiration. Backend will run locally or be deployed separately if needed.
+- **Backend – Railway** (Skipped)
+  - ~~Push backend to GitHub.~~
+  - ~~Create Railway project and connect the repo.~~
+  - ~~Configure environment variables.~~
+  - ~~Deploy and verify.~~
+  - **Status**: Skipped - Railway free trial expired. Backend remains local for development.
 - **Frontend – Vercel**
-  - Push frontend to GitHub.
+  - Push frontend to GitHub (or connect existing repo).
   - Import repo into Vercel.
-  - Configure:
-    - `NEXT_PUBLIC_API_BASE_URL` → Railway backend URL.
+  - Configure project settings:
+    - **Root Directory**: `ai-weather-frontend`
+    - **Framework Preset**: Next.js (auto-detected)
+    - **Build Command**: `npm run build` (default)
+    - **Output Directory**: `.next` (default)
+  - Configure environment variables:
+    - `NEXT_PUBLIC_API_BASE_URL` → Backend API URL (e.g., `http://localhost:3001` for local backend, or production backend URL if available)
   - Deploy and verify:
-    - Main search page and at least one city URL.
+    - Main search page loads correctly
+    - Autocomplete dropdown works
+    - Location weather detection works (with user consent)
+    - City pages (`/city/[name]`) work correctly
+    - Favorites and recent searches persist (localStorage)
+    - PWA installability works
+    - Service worker registers successfully
 - **Deliverables**
-  - Public, shareable URLs for:
-    - Backend API.
-    - Frontend app.
+  - Public, shareable URL for frontend app
+  - Production-ready frontend deployment
+  - Verified PWA functionality in production
 
-- **Status**: 🔄 In Progress (deployment prep completed; hosting integration pending)
+- **Status**: 🔄 In Progress (deployment prep completed; Vercel hosting integration pending)
   - **Phase 8 Improvements Implemented (Deployment-Ready Prep)**
     - **Next.js build warnings resolved**:
       - Moved `viewport` / `themeColor` from `metadata` → `export const viewport` in `ai-weather-frontend/src/app/layout.tsx`
       - Confirmed frontend production build succeeds without warnings
     - **Backend production start made hosting-safe**:
-      - Updated `ai-weather-backend/package.json` so `npm start` runs `node dist/main` (recommended for Railway)
+      - Updated `ai-weather-backend/package.json` so `npm start` runs `node dist/main` (recommended for Railway, ready if needed later)
     - **Health endpoint added for hosting checks**:
       - Added `GET /health` in `ai-weather-backend/src/app.controller.ts`
-    - **Environment templates added** (to guide Railway/Vercel env vars):
+    - **Environment templates added** (to guide Vercel env vars):
       - `ai-weather-backend/env.example`
       - `ai-weather-frontend/env.local.example`
     - **Git safety**:
       - Added root `.gitignore` to prevent committing any `**/.env*` files
-  - **Remaining (Hosting Service Integration Not Done Yet)**
-    - Create Railway project and deploy `ai-weather-backend`
+  - **Remaining (Vercel Hosting Integration Not Done Yet)**
     - Create Vercel project and deploy `ai-weather-frontend`
-    - Configure production environment variables on both platforms
-    - Verify production endpoints:
-      - Backend: `/health`, `/weather?city=Tokyo`, rate limit (429)
-      - Frontend: home, autocomplete, location weather (consent), `/city/[name]`
+    - Configure production environment variables on Vercel:
+      - `NEXT_PUBLIC_API_BASE_URL` (pointing to local backend or production backend if available)
+    - Verify production frontend:
+      - Home page loads and search works
+      - Autocomplete dropdown functions correctly
+      - Location weather detection works (with user consent)
+      - City pages (`/city/[name]`) work correctly
+      - Favorites and recent searches persist (localStorage)
+      - PWA installability works in production
+      - Service worker registers successfully
 
 ---
 
@@ -398,7 +412,7 @@ Each phase should end in something **runnable and stable**, even if visually min
     - `public/manifest.json` (new)
     - `public/sw.js` (new)
 
-**Note**: Backend hosting (Railway) was skipped due to free trial expiration. Frontend hosting (Vercel) will be set up next.
+**Note**: Backend hosting (Railway) was skipped due to free trial expiration. Frontend hosting (Vercel) is ready to be set up in Phase 8.
 
 This roadmap should be kept up to date as architecture evolves; every significant change should touch this file so it remains the single source of truth for **how** AI Weather is built and shipped.
 

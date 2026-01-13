@@ -1,10 +1,10 @@
 <div align="center">
 
-# AI-Weather
+# AI Weather
 
-**Development Phase yr. 25-26 (December 2025 - PRESENT)**
+**Development Phase**
 
-**[ A minimal, intelligent weather application with clean architecture ]**
+**A minimal, intelligent weather application with clean architecture**
 
 *Next.js + NestJS • TypeScript end-to-end • Vercel + Railway*
 
@@ -16,7 +16,7 @@
 
 ---
 
-## Description
+## Overview
 
 AI Weather is a **full‑stack weather application** that demonstrates modern web development practices through clean architecture, type safety, and thoughtful design. The project showcases a complete development workflow from initial setup to production deployment.
 
@@ -32,7 +32,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 
 ---
 
-## Tech Stacks
+## Tech Stack
 
 <table>
 <tr>
@@ -56,7 +56,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 </td>
 <td width="33%">
 
-### Infrastructure / Architecture
+### Infrastructure
 - Vercel (Frontend)
 - Railway (Backend)
 - Open‑Meteo API
@@ -98,7 +98,7 @@ AI Weather is a **full‑stack weather application** that demonstrates modern we
 
 ---
 
-## Development Progress Tracking
+## Development Progress
 
 This project follows a structured **9-phase development roadmap**:
 
@@ -110,10 +110,9 @@ This project follows a structured **9-phase development roadmap**:
 | **3** | ✅ | Caching & Rate-Limit Protection |
 | **4** | ✅ | Frontend MVP UI |
 | **5** | ✅ | Routing & City Pages |
-| **6** | ⏳ | AI Enhancements |
 | **7** | ✅ | Hardening, Security & Observability |
-| **8** | ⏳ | Deployment Pipeline |
-| **9** | 📋 | Post‑MVP Improvements |
+| **8** | 📋 | Deployment Pipeline |
+| **9** | ✅ | Post‑MVP Improvements |
 
 **Legend:** ✅ Complete | 🔄 In Progress | 📋 Planned
 
