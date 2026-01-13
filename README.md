@@ -110,10 +110,9 @@ This project follows a structured **9-phase development roadmap**:
 | **3** | ✅ | Caching & Rate-Limit Protection |
 | **4** | ✅ | Frontend MVP UI |
 | **5** | ✅ | Routing & City Pages |
-| **6** | 📋 | AI Enhancements |
 | **7** | ✅ | Hardening, Security & Observability |
 | **8** | 📋 | Deployment Pipeline |
-| **9** | 📋 | Post‑MVP Improvements |
+| **9** | ✅ | Post‑MVP Improvements |
 
 **Legend:** ✅ Complete | 🔄 In Progress | 📋 Planned
 
@@ -275,14 +274,13 @@ Manual testing checklist: `TESTING-CHECKLIST.md`.
   - ✅ Global error boundary for graceful failures
   - ✅ Responsive design
   - ✅ Japanese-inspired minimal UI
+  - ✅ Favorites system (localStorage)
+  - ✅ Recent searches tracking
+  - ✅ PWA support (offline caching, installable)
 
 ### Upcoming Features
 
-- 📋 AI-powered weather insights
-- 📋 Deployment pipeline (Railway + Vercel)
-- 📋 Saved cities / favorites
-- 📋 PWA support for offline mode
-- 📋 Enhanced monitoring & analytics
+- 📋 Frontend deployment (Vercel)
 
 ---
 

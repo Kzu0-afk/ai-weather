@@ -237,25 +237,6 @@ Each phase should end in something **runnable and stable**, even if visually min
 
 ---
 
-## Phase 6 – “AI” Layer (Honest Enhancements)
-
-- **Goals**
-  - Justify “AI Weather” with at least **one real intelligent behavior**, not marketing only.
-- **Possible Features (pick 1–2 to start)**
-  - **Smart suggestions**
-    - E.g. “Rain likely in 2 hours — bring an umbrella” based on condition + wind + humidity.
-  - **Trend comparison**
-    - “Today is colder than average by 3°C” using simple historical or heuristic baselines.
-  - **Natural‑language summary**
-    - Short, human‑readable description of the current conditions.
-- **Implementation Notes**
-  - Start with **rule‑based logic** derived from normalized fields.
-  - Optionally wrap with LLM later, but keep the weather facts from backend.
-- **Deliverables**
-  - Extra “Insight” block in the UI, driven from backend or shared logic, with clear text.
-
----
-
 ## Phase 7 – Hardening, Security & Observability ✅ **COMPLETED**
 
 - **Goals**
@@ -349,20 +330,75 @@ Each phase should end in something **runnable and stable**, even if visually min
 
 ---
 
-## Phase 9 – Next-Level Improvements (Post-MVP)
+## Phase 9 – Next-Level Improvements (Post-MVP) ✅ **COMPLETED**
 
-These are **optional** once the deployed MVP is solid:
-
-- **Performance & Scale**
-  - Swap in-memory cache for **Redis** (Railway add‑on).
-  - Add health check and readiness endpoints.
+- **Goals**
+  - Enhance user experience with persistent features (favorites, recent searches).
+  - Add PWA support for offline capability and installability.
+  - Improve location detection UX with better messaging.
 - **UX Enhancements**
-  - Saved cities / “favorites”.
-  - User location detection (with explicit consent).
-  - PWA mode for basic offline caching of last city.
-- **Security & Monitoring**
-  - Structured logging with redaction.
-  - Basic alerting when provider errors spike.
+  - **Saved Cities / Favorites**: 
+    - localStorage-based favorites system
+    - Star button on weather displays to add/remove favorites
+    - Favorites list on home page with quick navigation
+    - Maximum 20 favorites with automatic cleanup
+  - **Recent Searches**:
+    - Automatically tracks viewed cities
+    - Recent searches list on home page
+    - Maximum 10 recent searches
+    - Clear button to reset recent searches
+  - **Enhanced Location Detection**:
+    - Improved loading message with helpful hint
+    - Better accessibility (ARIA live regions)
+- **PWA Support**
+  - **Web App Manifest**: `public/manifest.json` with app metadata
+  - **Service Worker**: `public/sw.js` for offline caching
+    - Caches static pages (home, city routes)
+    - Network-first strategy for API calls (always fresh weather data)
+    - Fallback to cache for offline navigation
+  - **Installability**: App can be installed on mobile/desktop devices
+  - **Offline Support**: Basic offline page caching (no mock data per user rules)
+- **Deliverables**
+  - Users can save favorite cities and quickly access them
+  - Recent searches provide quick access to previously viewed cities
+  - App works offline (cached pages, no fresh weather data)
+  - App can be installed as a PWA
+- **Status**: ✅ Complete
+  - **Favorites System**:
+    - `src/lib/storage.ts` - localStorage utilities for favorites and recent searches
+    - `src/app/components/FavoritesList.tsx` - Favorites display component
+    - `src/app/components/WeatherDisplay.tsx` - Added star button for favoriting
+    - Home page displays favorites list
+  - **Recent Searches**:
+    - `src/app/components/RecentSearches.tsx` - Recent searches display component
+    - `src/app/components/CityWeatherWrapper.tsx` - Automatically adds cities to recent searches
+    - Home page displays recent searches list
+  - **PWA Implementation**:
+    - `public/manifest.json` - Web app manifest
+    - `public/sw.js` - Service worker for offline caching
+    - `src/app/components/ServiceWorkerRegistration.tsx` - Client-side service worker registration
+    - `src/app/layout.tsx` - Updated metadata with PWA support
+  - **Location UX Enhancement**:
+    - Improved loading message with helpful hint text
+    - Better accessibility attributes
+  - **Files Created/Updated**:
+    - `src/lib/storage.ts` (new)
+    - `src/app/components/FavoritesList.tsx` (new)
+    - `src/app/components/FavoritesList.module.css` (new)
+    - `src/app/components/RecentSearches.tsx` (new)
+    - `src/app/components/RecentSearches.module.css` (new)
+    - `src/app/components/CityWeatherWrapper.tsx` (new)
+    - `src/app/components/ServiceWorkerRegistration.tsx` (new)
+    - `src/app/components/WeatherDisplay.tsx` (updated - added favorite button)
+    - `src/app/components/WeatherDisplay.module.css` (updated - favorite button styles)
+    - `src/app/page.tsx` (updated - added favorites and recent searches)
+    - `src/app/page.module.css` (updated - location loading styles)
+    - `src/app/city/[name]/page.tsx` (updated - uses CityWeatherWrapper)
+    - `src/app/layout.tsx` (updated - PWA metadata and service worker)
+    - `public/manifest.json` (new)
+    - `public/sw.js` (new)
+
+**Note**: Backend hosting (Railway) was skipped due to free trial expiration. Frontend hosting (Vercel) will be set up next.
 
 This roadmap should be kept up to date as architecture evolves; every significant change should touch this file so it remains the single source of truth for **how** AI Weather is built and shipped.
 
