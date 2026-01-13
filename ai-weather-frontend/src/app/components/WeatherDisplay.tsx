@@ -1,16 +1,57 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { WeatherResponse } from "../../lib/api";
+import { addFavorite, removeFavorite, isFavorite } from "../../lib/storage";
 import styles from "./WeatherDisplay.module.css";
 
 interface WeatherDisplayProps {
   data: WeatherResponse;
+  showFavoriteButton?: boolean;
 }
 
-export default function WeatherDisplay({ data }: WeatherDisplayProps) {
+export default function WeatherDisplay({ data, showFavoriteButton = true }: WeatherDisplayProps) {
+  const [favorited, setFavorited] = useState(false);
+
+  useEffect(() => {
+    if (showFavoriteButton) {
+      setFavorited(isFavorite(data.city, data.country));
+    }
+  }, [data.city, data.country, showFavoriteButton]);
+
+  const handleFavoriteToggle = () => {
+    if (favorited) {
+      removeFavorite(data.city, data.country);
+      setFavorited(false);
+    } else {
+      addFavorite({
+        name: data.city,
+        country: data.country,
+        countryCode: data.country,
+        savedAt: new Date().toISOString(),
+      });
+      setFavorited(true);
+    }
+  };
+
   return (
     <section className={styles.result} aria-label="Weather information">
       <div className={styles.resultHeader}>
         <div>
-          <h2 className={styles.city}>{data.city}</h2>
+          <div className={styles.cityRow}>
+            <h2 className={styles.city}>{data.city}</h2>
+            {showFavoriteButton && (
+              <button
+                type="button"
+                onClick={handleFavoriteToggle}
+                className={styles.favoriteButton}
+                aria-label={favorited ? `Remove ${data.city} from favorites` : `Add ${data.city} to favorites`}
+                title={favorited ? "Remove from favorites" : "Add to favorites"}
+              >
+                {favorited ? "★" : "☆"}
+              </button>
+            )}
+          </div>
           <p className={styles.meta}>
             <span aria-label={`Country: ${data.country}`}>{data.country}</span>
             {" · "}

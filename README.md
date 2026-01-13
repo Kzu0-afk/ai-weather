@@ -275,14 +275,13 @@ Manual testing checklist: `TESTING-CHECKLIST.md`.
   - ✅ Global error boundary for graceful failures
   - ✅ Responsive design
   - ✅ Japanese-inspired minimal UI
+  - ✅ Favorites system (localStorage)
+  - ✅ Recent searches tracking
+  - ✅ PWA support (offline caching, installable)
 
 ### Upcoming Features
 
-- 📋 AI-powered weather insights
-- 📋 Deployment pipeline (Railway + Vercel)
-- 📋 Saved cities / favorites
-- 📋 PWA support for offline mode
-- 📋 Enhanced monitoring & analytics
+- 📋 Frontend deployment (Vercel)
 
 ---
 

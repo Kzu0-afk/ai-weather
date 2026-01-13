@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +19,12 @@ export const metadata: Metadata = {
   description: "A minimal, intelligent weather application with clean architecture. Search by city for essential weather data—temperature, humidity, wind, and conditions.",
   keywords: ["weather", "forecast", "weather app", "weather API", "climate"],
   authors: [{ name: "AI Weather" }],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "AI Weather",
+  },
   openGraph: {
     title: "AI Weather | Find calm, clear forecasts",
     description: "A minimal, intelligent weather application with clean architecture.",
@@ -39,7 +46,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ErrorBoundary>{children}</ErrorBoundary>
+        <ErrorBoundary>
+          <ServiceWorkerRegistration />
+          {children}
+        </ErrorBoundary>
       </body>
     </html>
   );

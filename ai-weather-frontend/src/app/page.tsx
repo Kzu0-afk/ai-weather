@@ -10,6 +10,8 @@ import {
   WeatherResponse,
 } from "../lib/api";
 import WeatherDisplay from "./components/WeatherDisplay";
+import FavoritesList from "./components/FavoritesList";
+import RecentSearches from "./components/RecentSearches";
 
 export default function Home() {
   const router = useRouter();
@@ -251,8 +253,9 @@ export default function Home() {
         )}
 
         {locationLoading && (
-          <div className={styles.locationLoading}>
-            Detecting your location...
+          <div className={styles.locationLoading} role="status" aria-live="polite">
+            <span>Detecting your location...</span>
+            <p className={styles.locationHint}>Allow location access to see weather for your current location</p>
           </div>
         )}
 
@@ -264,6 +267,9 @@ export default function Home() {
             <WeatherDisplay data={locationWeather} />
           </div>
         )}
+
+        <FavoritesList />
+        <RecentSearches />
       </main>
     </div>
   );
